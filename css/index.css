@@ -1,0 +1,210 @@
+body,
+html {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Header */
+.header {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+    padding: 20px 0;
+    background: transparent;
+}
+
+.header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-wrapper img {
+    height: 40px;
+}
+
+.logo-text {
+    font-size: 20px;
+    color: white;
+}
+
+.navbar a {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar .btn-daftar {
+    background-color: #f8a500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: white;
+}
+
+
+
+/* Hero Section */
+.hero {
+    background-image: url('../img/hero.png');
+    /* perbaiki path */
+    background-size: cover;
+    background-position: center;
+    height: 500px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+
+}
+
+/* Tambahkan pseudo-element untuk overlay biru transparan */
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(101, 176, 255, 0.9);
+    /* biru dengan opacity 50% */
+    z-index: 2;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Pastikan konten di dalam .hero tetap tampil di atas overlay */
+.hero-overlay {
+    position: relative;
+    z-index: 3;
+    padding-top: 150px;
+    text-align: center;
+    color: white;
+}
+
+.hero-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.search-box {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    gap: 10px;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: flex-end;
+}
+
+.search-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-group label {
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.search-group input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+}
+
+.swap-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 30px;
+}
+
+.swap-btn img {
+    width: 30px;
+    height: 30px;
+}
+
+.btn-cari {
+    background-color: #f8a500;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+/* Informasi Section */
+.info-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px 10%;
+    background: #fff;
+    gap: 40px;
+}
+
+.info-section.alt {
+    background: #f2f2f2;
+}
+
+.info-box {
+    flex: 1;
+}
+
+.info-box h2 {
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+
+.info-box p {
+    color: #555;
+}
+
+.info-img {
+    flex: 1;
+    text-align: center;
+}
+
+.info-img img {
+    max-width: 100%;
+    height: auto;
+}
+
+.lihat-btn {
+    display: inline-block;
+    margin-top: 15px;
+    background: #0077c8;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+}
