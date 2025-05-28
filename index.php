@@ -20,7 +20,7 @@
     <div class="nav-left">
       <a href="#">Beranda</a>
       <a href="#">Bantuan</a>
-      <a href="#">Cara Bayar</a>
+      <a href="carabayar.php">Cara Bayar</a>
     </div>
     <div class="nav-right">
       <a href="">Cek Order</a>
