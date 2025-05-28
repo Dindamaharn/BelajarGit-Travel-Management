@@ -4,6 +4,8 @@
       <meta charset="UTF-8">
       <title>Kiran Travel & Tour</title>
       <link rel="stylesheet" href="css/index.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   </head>
   <body>
 
@@ -95,12 +97,72 @@
       <div class="info-box">
           <h2>Beragam Pilihan Shuttle/Travel Terbaik</h2>
           <p>Ada banyak pilihan shuttle/travel terbaik dengan rute lengkap untuk teman perjalanan kamu, kemanapun kamu inginkan. Pesan tiketnya sekarang!</p>
-      </div>
+           <a href="#" class="btn-mitra">Lihat Mitra</a>
+        </div>
       <div class="info-img">
-          <img src="img/shuttle.png" alt="Shuttle">
+          <img src="img/section1.png" alt="Shuttle">
       </div>
+      
   </section>
+<section class="logo-slider">
+  <!-- Baris 1 -->
+  <div class="slider-wrapper">
+    <div class="slider track1">
+      <div class="slide-track">
+        <img src="img/logo1.png" alt="Logo 1">
+        <img src="img/logo2.png" alt="Logo 2">
+        <img src="img/logo3.png" alt="Logo 3">
+        <img src="img/logo4.png" alt="Logo 4">
+        <img src="img/logo5.png" alt="Logo 5">
+        <!-- duplikat -->
+        <img src="img/logo1.png" alt="Logo 1">
+        <img src="img/logo2.png" alt="Logo 2">
+        <img src="img/logo3.png" alt="Logo 3">
+        <img src="img/logo4.png" alt="Logo 4">
+        <img src="img/logo5.png" alt="Logo 5">
+         <img src="img/logo1.png" alt="Logo 1">
+        <img src="img/logo2.png" alt="Logo 2">
+        <img src="img/logo3.png" alt="Logo 3">
+        <img src="img/logo4.png" alt="Logo 4">
+        <img src="img/logo5.png" alt="Logo 5">
+         <img src="img/logo1.png" alt="Logo 1">
+        <img src="img/logo2.png" alt="Logo 2">
+        <img src="img/logo3.png" alt="Logo 3">
+        <img src="img/logo4.png" alt="Logo 4">
+        <img src="img/logo5.png" alt="Logo 5">
+      </div>
+    </div>
+  </div>
 
+  <!-- Baris 2 -->
+  <div class="slider-wrapper">
+    <div class="slider track2">
+      <div class="slide-track">
+        <img src="img/logo6.png" alt="Logo 6">
+        <img src="img/logo7.png" alt="Logo 7">
+        <img src="img/logo8.png" alt="Logo 8">
+        <img src="img/logo9.png" alt="Logo 9">
+        <img src="img/logo10.png" alt="Logo 10">
+        <!-- duplikat -->
+        <img src="img/logo6.png" alt="Logo 6">
+        <img src="img/logo7.png" alt="Logo 7">
+        <img src="img/logo8.png" alt="Logo 8">
+        <img src="img/logo9.png" alt="Logo 9">
+        <img src="img/logo10.png" alt="Logo 10">
+          <img src="img/logo6.png" alt="Logo 6">
+        <img src="img/logo7.png" alt="Logo 7">
+        <img src="img/logo8.png" alt="Logo 8">
+        <img src="img/logo9.png" alt="Logo 9">
+        <img src="img/logo10.png" alt="Logo 10">
+           <img src="img/logo6.png" alt="Logo 6">
+        <img src="img/logo7.png" alt="Logo 7">
+        <img src="img/logo8.png" alt="Logo 8">
+        <img src="img/logo9.png" alt="Logo 9">
+        <img src="img/logo10.png" alt="Logo 10">
+      </div>
+    </div>
+  </div>
+</section>
 
   <section class="info-section alt">
       <div class="info-img">
@@ -112,6 +174,74 @@
           <a href="#" class="lihat-btn">Lihat Metode Pembayaran</a>
       </div>
   </section>
+  <!-- FAQ Section -->
+<section class="faq-section">
+  <div class="faq-container">
+    <!-- Left Illustration -->
+    <div class="faq-image-wrapper">
+      <div class="faq-background-shape"></div>
+      <img src="img/faq.png" alt="Ilustrasi FAQ" class="faq-image" />
+    </div>
+
+    <!-- Right Content -->
+    <div class="faq-content">
+      <h2 class="faq-heading">
+        Punya Pertanyaan? Tenang, <br />
+        Tiketux Punya Jawabannya!
+      </h2>
+      <p class="faq-subtext">
+        Kita udah rangkumin tiga pertanyaan yang paling sering ditanyain. Kalau masih kurang jelas, cek FAQ lengkapnya, ya!
+      </p>
+
+      <!-- Accordion -->
+      <div class="faq-accordion">
+        <details class="faq-item highlighted">
+          <summary>Dapatkah pemesanan tiket dilakukan tanpa mengisi alamat email dan nomor telepon atau hanya mengisi salah satunya?</summary>
+          <p>
+            Tidak bisa, pemesanan tiket secara online di Tiketux.com perlu mengisi email dan nomor kontak aktif (disarankan terhubung Whatsapp)
+            karena e-tiket akan dikirim melalui email yang terdaftar.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Platform apa saja yang dapat digunakan untuk melakukan pemesanan tiket bus dan shuttle / travel di Tiketux?</summary>
+        </details>
+
+        <details class="faq-item">
+          <summary>Apakah semua pengguna bisa mendapatkan voucher refund?</summary>
+        </details>
+      </div>
+
+      <!-- CTA Button -->
+      <a href="#faq" class="faq-button">Lihat Semua Pertanyaan di FAQ!</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <img src="img/logowarna.png" alt="Kiran Tour & Travel" class="footer-logo" />
+      <p><strong>PT Trans Kiran Travel</strong></p>
+      <p><i class="fas fa-envelope"></i> info@kiran.com</p>
+      <p><i class="fas fa-phone"></i> 081234785009</p>
+      <p><i class="fas fa-map-marker-alt"></i> Jl. Karimun Jawa IV No. 98B, Kec. Bodat Utara, Kota Surabaya, Jawa Timur 30881</p>
+    </div>
+
+    <div class="footer-right">
+      <h4>Media Sosial</h4>
+      <p><i class="fab fa-instagram"></i> kirantravel</p>
+      <p><i class="fab fa-tiktok"></i> kirantravel</p>
+      <p><i class="fab fa-facebook-f"></i> kirantravel</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 PT Trans Kiran Travel. All Rights Reserved.</p>
+  </div>
+</footer>
+
+
 <script src="js/script.js"></script>
   </body>
   </html>
