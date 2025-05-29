@@ -19,7 +19,7 @@
       <nav class="navbar">
     <div class="nav-left">
       <a href="#">Beranda</a>
-      <a href="#">Bantuan</a>
+      <a href="bantuan.php">Bantuan</a>
       <a href="carabayar.php">Cara Bayar</a>
     </div>
     <div class="nav-right">
@@ -217,6 +217,9 @@
     </div>
   </div>
 </section>
+<a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Kiran%20Travel,%20saya%20ingin%20tanya%20soal%20pembayaran" class="chat-wa" target="_blank">
+    <i class="fab fa-whatsapp"></i> Chat Sekarang
+  </a>
 
 <footer class="footer">
   <div class="footer-content">

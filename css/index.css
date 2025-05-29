@@ -10,7 +10,7 @@ html {
     width: 100%;
     top: 0;
     z-index: 10;
-    padding: 20px 0;
+    padding: 0px 0;
     background: transparent;
 }
 
@@ -515,4 +515,25 @@ html {
 .footer i {
     margin-right: 8px;
     color: #333;
+}
+
+/* Chat WA */
+.chat-wa {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #25D366;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+}
+
+.chat-wa i {
+    margin-right: 8px;
 }

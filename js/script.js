@@ -19,3 +19,13 @@ document.addEventListener('DOMContentLoaded', function () {
         formRoundtrip.style.display = 'flex';
     });
 });
+
+// cara bayar
+
+document.querySelectorAll('.payment-item').forEach(item => {
+    const arrow = item.querySelector('.toggle-arrow');
+    arrow.addEventListener('click', () => {
+        item.classList.toggle('open');
+    });
+});
+
