@@ -3,7 +3,7 @@
   <head>
       <meta charset="UTF-8">
       <title>Kiran Travel & Tour</title>
-      <link rel="stylesheet" href="css/cekorder.css">
+      <link rel="stylesheet" href="../css/user/cekorder.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   </head>
@@ -13,7 +13,7 @@
   <header class="header">
     <div class="container">
       <div class="logo-wrapper">
-        <img src="img/logowarna.jpg" alt="Logo Kiran">
+        <img src="../img/logowarna.jpg" alt="Logo Kiran">
         <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
       </div>
       <nav class="navbar">
@@ -36,7 +36,7 @@
   <div class="cek-order-container">
     <!-- Kiri: Ilustrasi + Keterangan -->
     <div class="cek-illustration">
-      <img src="img/cekorder.png" alt="Cek Pesanan" />
+      <img src="../img/cekorder.png" alt="Cek Pesanan" />
       <h2>Cek Pesanan Kamu</h2>
       <p>Masukan email dan ID pemesanan <br>di form cek pesanan</p>
     </div>
@@ -64,7 +64,7 @@
   <footer class="footer">
   <div class="footer-content">
     <div class="footer-left">
-      <img src="img/logowarna.png" alt="Kiran Tour & Travel" class="footer-logo" />
+      <img src="../img/logowarna.png" alt="Kiran Tour & Travel" class="footer-logo" />
       <p><strong>PT Trans Kiran Travel</strong></p>
       <p><i class="fas fa-envelope"></i> info@kiran.com</p>
       <p><i class="fas fa-phone"></i> 081234785009</p>
@@ -84,6 +84,6 @@
   </div>
 </footer>
 
-<script src="js/script.js"></script>
+<script src="../js/script.js"></script>
    </body>
   </html>

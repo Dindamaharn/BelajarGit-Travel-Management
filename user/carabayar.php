@@ -3,7 +3,7 @@
   <head>
       <meta charset="UTF-8">
       <title>Kiran Travel & Tour</title>
-      <link rel="stylesheet" href="css/carabayar.css">
+      <link rel="stylesheet" href="../css/user/carabayar.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   </head>
@@ -13,7 +13,7 @@
   <header class="header">
     <div class="container">
       <div class="logo-wrapper">
-        <img src="img/logowarna.jpg" alt="Logo Kiran">
+        <img src="../img/logowarna.jpg" alt="Logo Kiran">
         <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
       </div>
       <nav class="navbar">
@@ -45,7 +45,7 @@
     <div class="payment-list">
   <div class="payment-item">
     <div class="payment-summary">
-      <img src="img/ovo.png" alt="Finpay">
+      <img src="../img/ovo.png" alt="Finpay">
       <span>OVO</span>
       <i class="fas fa-chevron-down toggle-arrow"></i>
     </div>
@@ -64,7 +64,7 @@
 
   <div class="payment-item">
     <div class="payment-summary">
-      <img src="img/dana.png" alt="Jenius">
+      <img src="../img/dana.png" alt="Jenius">
       <span>DANA</span>
       <i class="fas fa-chevron-down toggle-arrow"></i>
     </div>
@@ -84,7 +84,7 @@
 
    <div class="payment-item">
     <div class="payment-summary">
-      <img src="img/spay.png" alt="Jenius">
+      <img src="../img/spay.png" alt="Jenius">
       <span>ShopeePay</span>
       <i class="fas fa-chevron-down toggle-arrow"></i>
     </div>
@@ -100,7 +100,7 @@
 
   <div class="payment-item">
     <div class="payment-summary">
-      <img src="img/bca.png" alt="GoPay">
+      <img src="../img/bca.png" alt="GoPay">
       <span>BCA Virtual Account</span>
       <i class="fas fa-chevron-down toggle-arrow"></i>
     </div>
@@ -119,7 +119,7 @@
 
   <div class="payment-item">
     <div class="payment-summary">
-      <img src="img/indomaret.png" alt="Jenius">
+      <img src="../img/indomaret.png" alt="Jenius">
       <span>Indomaret</span>
       <i class="fas fa-chevron-down toggle-arrow"></i>
     </div>
@@ -136,7 +136,7 @@
 
   <div class="payment-item">
     <div class="payment-summary">
-      <img src="img/alfamart.png" alt="Jenius">
+      <img src="../img/alfamart.png" alt="Jenius">
       <span>Alfamart</span>
       <i class="fas fa-chevron-down toggle-arrow"></i>
     </div>
@@ -160,7 +160,7 @@
   <footer class="footer">
   <div class="footer-content">
     <div class="footer-left">
-      <img src="img/logowarna.png" alt="Kiran Tour & Travel" class="footer-logo" />
+      <img src="../img/logowarna.png" alt="Kiran Tour & Travel" class="footer-logo" />
       <p><strong>PT Trans Kiran Travel</strong></p>
       <p><i class="fas fa-envelope"></i> info@kiran.com</p>
       <p><i class="fas fa-phone"></i> 081234785009</p>
@@ -180,6 +180,6 @@
   </div>
 </footer>
 
-<script src="js/script.js"></script>
+<script src="../js/script.js"></script>
    </body>
   </html>

@@ -1,22 +1,56 @@
-<?php
-include "db.php";
 
+<?php
+include "../includes/db.php";
+
+session_start();
 $error = "";
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $email = trim($_POST['email']);
     $pass  = $_POST['password'];
 
-    $result = $conn->query("SELECT * FROM user WHERE email='$email'");
-    if ($result && $result->num_rows > 0) {
-        $data = $result->fetch_assoc();
+    // Cek dulu di tabel admin
+    $stmt = $conn->prepare("SELECT * FROM admins WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $resultAdmin = $stmt->get_result();
+
+    if ($resultAdmin && $resultAdmin->num_rows > 0) {
+        $data = $resultAdmin->fetch_assoc();
+
         if (password_verify($pass, $data['password'])) {
-            header("Location: index.php");
+            $_SESSION['user_id'] = $data['id'];
+            $_SESSION['user_name'] = $data['name']; // Sesuaikan nama kolom di tabel admin
+            $_SESSION['role'] = 'admin';
+
+            header("Location: ../admin/dashboard.php"); // Halaman khusus admin
             exit;
         } else {
             $error = "Password salah.";
         }
     } else {
-        $error = "Email tidak terdaftar.";
+        // Jika tidak ketemu admin, cek di tabel users
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $resultUser = $stmt->get_result();
+
+        if ($resultUser && $resultUser->num_rows > 0) {
+            $data = $resultUser->fetch_assoc();
+
+            if (password_verify($pass, $data['password'])) {
+                $_SESSION['user_id'] = $data['id'];
+                $_SESSION['user_name'] = $data['name']; // Sesuaikan nama kolom di tabel users
+                $_SESSION['role'] = 'user';
+
+                header("Location: ../user/index.php"); // Halaman utama user
+                exit;
+            } else {
+                $error = "Password salah.";
+            }
+        } else {
+            $error = "Email tidak terdaftar.";
+        }
     }
 }
 ?>
@@ -26,22 +60,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login / Daftar – Kiran Travel</title>
-  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="../css/user/login.css">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="auth-wrapper">
     <!-- Form Card -->
     <div class="auth-box">
-      <img src="img/logowarna.png" alt="Logo Kiran" class="auth-logo">
-      <h2>Login / Daftar</h2>
+      <img src="../img/logowarna.png" alt="Logo Kiran" class="auth-logo">
+      <h2>Login / Masuk</h2>
 
       <?php if($error): ?>
         <div class="alert"><?= htmlspecialchars($error) ?></div>
       <?php endif; ?>
 
       <form method="POST" action="login.php" novalidate>
-        <label for="email">Nomor Telepon / Email</label>
+        <label for="email">Email</label>
         <input
           type="text"
           id="email"
@@ -87,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
           Lihat semua transaksi pesan-anmu lebih mudah
         </li>
       </ul>
-      <img src="img/illustration-guest.png" alt="Ilustrasi" class="info-illu">
+      <img src="../img/illustration-guest.png" alt="Ilustrasi" class="info-illu">
     </div>
   </div>
 </body>

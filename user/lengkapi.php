@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Lengkapi Informasi</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/user/style.css">
 </head>
 <body>
 <?php $id = $_GET['id']; ?>
