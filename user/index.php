@@ -68,6 +68,7 @@ session_start();
       background-color: #e6a220;
     }
   </style>
+  <script src="../js/script.js"></script>
 <body>
 
 <!-- Header -->

@@ -80,3 +80,55 @@ body {
 .content {
   margin-top: 30px;
 }
+.btn-add-package {
+  display: inline-block;
+  background-color: #28a745;
+  color: white;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.btn-add-package:hover {
+  background-color: #218838;
+}
+
+.packages-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.packages-table th,
+.packages-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.packages-table th {
+  background-color: #f8edd9;
+}
+
+.packages-table tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+.btn-edit,
+.btn-delete {
+  padding: 5px 8px;
+  margin: 2px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.btn-edit {
+  background-color: #ffd700;
+  color: #000;
+}
+
+.btn-delete {
+  background-color: #dd5c36;
+  color: #fff;
+}
