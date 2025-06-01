@@ -19,14 +19,17 @@ $username = $_SESSION['user_name'];
 
 <div class="container">
   <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="logo">Kiran Travel</div>
+ <div class="sidebar">
+    <div class="logo-wrapper">
+      <img src="../img/logoputih.png" alt="Logo Kiran" />
+      <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
+    </div>
     <ul>
-      <li><a href="dashboard.php"><i class="fas fa-home"></i></a></li>
-      <li><a href="manageuser.php"><i class="fas fa-users"></i></a></li>
-      <li><a href="managepackages.php"><i class="fas fa-suitcase"></i></a></li>
-      <li><a href="transaction.php"><i class="fas fa-file-invoice"></i></a></li>
-      <li><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i></a></li>
+      <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+      <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
+      <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Manage Packages</span></a></li>
+      <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaction</span></a></li>
+      <li><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
     </ul>
   </div>
 

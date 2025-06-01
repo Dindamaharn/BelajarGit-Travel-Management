@@ -11,7 +11,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 70px;
+  width: 180px;
   background-color: #111;
   color: #fff;
   display: flex;
@@ -36,9 +36,13 @@ body {
 }
 
 .sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* jarak antara ikon dan teks */
   color: #fff;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .sidebar a:hover {
@@ -86,6 +90,7 @@ form input[type="text"] {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+
 form button {
   padding: 5px 10px;
   border: none;
@@ -94,6 +99,23 @@ form button {
   border-radius: 5px;
   cursor: pointer;
 }
+
 form button:hover {
   background-color: #34495e;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-wrapper img {
+  height: 90px;
+}
+
+.logo-text {
+  font-size: 15px;
+  color: white;
+  transform: translateX(-20px);
 }

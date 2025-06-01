@@ -1,0 +1,208 @@
+body,
+html {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Header */
+.header {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+    padding: 0px 0;
+    background: rgb(255, 255, 255);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* 👈 bayangan bawah */
+}
+
+.header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-wrapper img {
+    height: 90px;
+}
+
+.logo-text {
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.nav-left a,
+.nav-right a {
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+}
+
+.nav-right {
+    margin-left: 300px;
+    /* Ini yang mendorong ke kanan */
+}
+
+.btn-daftar {
+    background-color: #f8a500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: white;
+}
+
+.mitra-section {
+    padding: 60px 20px;
+    background: #fff;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+
+}
+
+.mitra-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #222;
+    transform: translatey(80px);
+}
+
+.mitra-desc {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+    transform: translatey(80px);
+}
+
+.mitra-count {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+    text-align: left;
+    transform: translatey(80px);
+}
+
+.mitra-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    text-align: left;
+    gap: 20px;
+    transform: translatey(80px);
+}
+
+.mitra-grid ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 50px;
+}
+
+.mitra-grid li {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #111;
+}
+
+
+/* Chat WA */
+.chat-wa {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #25D366;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+}
+
+.chat-wa i {
+    margin-right: 8px;
+}
+
+/* Footer */
+
+.footer {
+    background-color: #fff;
+    padding: 40px 20px 20px;
+    border-top: 1px solid #eaeaea;
+    font-family: sans-serif;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-left: 120px
+}
+
+@media (min-width: 768px) {
+    .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+.footer-left,
+.footer-right {
+    flex: 1;
+}
+
+.footer-logo {
+    height: 100px;
+
+}
+
+.footer-left p,
+.footer-right p {
+    margin: 6px 0;
+    color: #333;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-right: 220px;
+}
+
+.footer-right h4 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: #777;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+
+.footer i {
+    margin-right: 8px;
+    color: #333;
+}

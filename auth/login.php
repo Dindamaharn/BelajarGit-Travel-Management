@@ -96,12 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 
         <button type="submit" name="login" class="btn-primary">Lanjutkan</button>
       </form>
-
-      <div class="or"><span>atau</span></div>
-
-      <a href="#" class="btn-google">
-        <i class="fab fa-google"></i> Gunakan Akun Google
-      </a>
     </div>
 
     <!-- Info Card -->
@@ -118,10 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         </li>
         <li>
           <strong>Detail Transaksi</strong>
-          Lihat semua transaksi pesan-anmu lebih mudah
+          Lihat semua transaksi pesananmu lebih mudah
         </li>
       </ul>
-      <img src="../img/illustration-guest.png" alt="Ilustrasi" class="info-illu">
+
     </div>
   </div>
 </body>

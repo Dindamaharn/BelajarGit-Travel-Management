@@ -10,6 +10,13 @@ session_start();
     <title>Kiran Travel & Tour</title>
     <link rel="stylesheet" href="../css/user/index.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Flatpickr CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<!-- Flatpickr Range Plugin -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/rangePlugin.js"></script>
+
 </head>
 
 <style>
@@ -116,23 +123,41 @@ session_start();
       </div>
     </h1>
 
+    
     <!-- Form untuk Sekali Jalan -->
     <div class="search-box" id="form-oneway">
       <div class="search-group">
         <label>Berangkat Dari</label>
+        <div class="input-wrapper">
+        <i class="fa fa-location-dot"></i>
         <input type="text" value="Bandung" />
       </div>
-      <div class="swap-btn">
-        <img src="../img/swap.svg" alt="Swap" />
       </div>
+
+
+     <button class="swap-btn">
+      <i class="fa fa-right-left"></i>
+    </button>
+        
+
       <div class="search-group">
         <label>Untuk Tujuan</label>
+         <div class="input-wrapper">
+        <i class="fa fa-location-dot"></i>
         <input type="text" value="Jakarta" />
       </div>
+      </div>
+
+
       <div class="search-group">
         <label>Tanggal Berangkat</label>
+         <div class="input-wrapper">
+        <i class="fa fa-calendar-days"></i>
         <input type="text" value="Sen, 27 Mei" />
       </div>
+      </div>
+
+      
       <button class="btn-cari"><i class="fa fa-search"></i> Cari</button>
     </div>
 
@@ -140,23 +165,36 @@ session_start();
     <div class="search-box" id="form-roundtrip" style="display: none;">
       <div class="search-group">
         <label>Berangkat Dari</label>
+        <div class="input-wrapper">
+        <i class="fa fa-location-dot"></i>
         <input type="text" value="Bandung" />
       </div>
-      <div class="swap-btn">
-        <img src="../img/swap.svg" alt="Swap" />
       </div>
+
+      <button class="swap-btn">
+      <i class="fa fa-right-left"></i>
+    </button>
+
       <div class="search-group">
         <label>Untuk Tujuan</label>
+         <div class="input-wrapper">
+        <i class="fa fa-location-dot"></i>
         <input type="text" value="Jakarta" />
       </div>
-      <div class="search-group">
-        <label>Tanggal Berangkat</label>
-        <input type="text" value="Sen, 27 Mei" />
       </div>
-      <div class="search-group">
-        <label>Tanggal Pulang</label>
-        <input type="text" value="Rab, 29 Mei" />
-      </div>
+
+<div class="search-group">
+  <label>Tanggal Pulang Pergi</label>
+  <div class="input-wrapper">
+    <i class="fa fa-calendar-days"></i>
+    <input type="text" id="display-range" readonly placeholder="Pilih tanggal" />
+    <input type="hidden" id="departure-date" name="departure_date" />
+    <input type="hidden" id="return-date" name="return_date" />
+  </div>
+</div>
+
+
+
       <button class="btn-cari"><i class="fa fa-search"></i> Cari</button>
     </div>
   </div>
@@ -167,7 +205,7 @@ session_start();
   <div class="info-box">
     <h2>Beragam Pilihan Shuttle/Travel Terbaik</h2>
     <p>Ada banyak pilihan shuttle/travel terbaik dengan rute lengkap untuk teman perjalanan kamu, kemanapun kamu inginkan. Pesan tiketnya sekarang!</p>
-    <a href="#" class="btn-mitra">Lihat Mitra</a>
+    <a href="lihatmitra.php" class="btn-mitra">Lihat Mitra</a>
   </div>
   <div class="info-img">
     <img src="../img/section1.png" alt="Shuttle" />
@@ -242,7 +280,7 @@ session_start();
   <div class="info-box">
     <h2>Beragam Pilihan Pembayaran</h2>
     <p>Pembayaran jadi lebih mudah dan fleksibel. Kamu bisa pilih pembayaran sesuai keinginan mulai dari OVO, GoPay, BCA Virtual Account, Gerai Retail (Alfamart/Indomaret) dan berbagai pilihan lainnya.</p>
-    <a href="#" class="lihat-btn">Lihat Metode Pembayaran</a>
+    <a href="carabayar.php" class="lihat-btn">Lihat Metode Pembayaran</a>
   </div>
 </section>
 
@@ -277,15 +315,21 @@ session_start();
 
         <details class="faq-item">
           <summary>Platform apa saja yang dapat digunakan untuk melakukan pemesanan tiket bus dan shuttle / travel di Tiketux?</summary>
+          <p>
+            Tidak bisa, pemesanan tiket secara online di Tiketux.com perlu mengisi email dan nomor kontak aktif (disarankan terhubung Whatsapp)
+            karena e-tiket akan dikirim melalui email yang terdaftar.
+          </p>
         </details>
 
         <details class="faq-item">
           <summary>Apakah semua pengguna bisa mendapatkan voucher refund?</summary>
+          <p>
+            Tidak bisa, pemesanan tiket secara online di Tiketux.com perlu mengisi email dan nomor kontak aktif (disarankan terhubung Whatsapp)
+            karena e-tiket akan dikirim melalui email yang terdaftar.
+          </p>
         </details>
       </div>
 
-      <!-- CTA Button -->
-      <a href="#faq" class="faq-button">Lihat Semua Pertanyaan di FAQ!</a>
     </div>
   </div>
 </section>
@@ -302,3 +346,17 @@ session_start();
       <p><i class="fas fa-envelope"></i> info@kiran.com</p>
       <p><i class="fas fa-phone"></i> 081234785009</p>
       <p><i class="fas fa-map-marker-alt"></i> Jl. Karimun Jawa
+      </div>
+
+    <div class="footer-right">
+      <h4>Media Sosial</h4>
+      <p><i class="fab fa-instagram"></i> kirantravel</p>
+      <p><i class="fab fa-tiktok"></i> kirantravel</p>
+      <p><i class="fab fa-facebook-f"></i> kirantravel</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 PT Trans Kiran Travel. All Rights Reserved.</p>
+  </div>
+</footer>

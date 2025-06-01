@@ -29,3 +29,30 @@ document.querySelectorAll('.payment-item').forEach(item => {
     });
 });
 
+// tanggal pp
+document.addEventListener("DOMContentLoaded", function () {
+    flatpickr("#display-range", {
+        mode: "range",
+        dateFormat: "D, j M",
+        minDate: "today",
+        onChange: function (selectedDates, dateStr, instance) {
+            if (selectedDates.length === 2) {
+                const depart = selectedDates[0];
+                const ret = selectedDates[1];
+                const formatDate = d =>
+                    d.toLocaleDateString("en-GB", {
+                        weekday: "short",
+                        day: "numeric",
+                        month: "short",
+                    });
+
+                // tampilkan gabungan di input tampilan
+                document.getElementById("display-range").value = `${formatDate(depart)} - ${formatDate(ret)}`;
+
+                // simpan ke input tersembunyi
+                document.getElementById("departure-date").value = depart.toISOString().split("T")[0];
+                document.getElementById("return-date").value = ret.toISOString().split("T")[0];
+            }
+        },
+    });
+});

@@ -1,20 +1,32 @@
 <?php include ("../includes/db.php"); ?>
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Register</title>
-    <link rel="stylesheet" href="../css/user/style.css">
+  <meta charset="UTF-8">
+  <title>Lengkapi Informasi Diri</title>
+  <link rel="stylesheet" href="../css/user/register.css">
+
 </head>
 <body>
+
 <div class="container">
-    <h2>Register</h2>
-    <form action="register.php" method="POST">
-        <input type="text" name="name" placeholder="Nama Lengkap" required />
-        <input type="email" name="email" placeholder="Email" required />
-        <input type="text" name="phone" placeholder="Nomor Telepon" required />
-        <input type="password" name="password" placeholder="Password" required />
-        <button type="submit" name="register">Register</button>
-    </form>
+  <img src="../img/logowarna.png" alt="Logo" style="height: 50px;">
+  <h2>Lengkapi Informasi Diri</h2>
+  <form action="register.php" method="POST">
+    <label for="name">Nama Lengkap</label>
+    <input type="text" name="name" id="name" placeholder="Masukan nama lengkap" required />
+
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" placeholder="Masukan email" required />
+
+    <label for="phone">Nomor Telepon</label>
+    <input type="text" name="phone" id="phone" placeholder="Masukan nomor telepon" required />
+
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" placeholder="Masukan password" required />
+
+    <button type="submit" name="register">Lanjutkan</button>
+  </form>
 </div>
 
 <?php
@@ -24,7 +36,6 @@ if (isset($_POST['register'])) {
     $phone    = trim($_POST['phone']);
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    // Cek apakah email sudah terdaftar
     $check = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $check->bind_param("s", $email);
     $check->execute();
@@ -33,16 +44,16 @@ if (isset($_POST['register'])) {
     if ($result->num_rows > 0) {
         echo "<script>alert('Email sudah terdaftar');</script>";
     } else {
-        // Insert data baru
         $stmt = $conn->prepare("INSERT INTO users (name, email, phone, password) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $name, $email, $phone, $password);
         if ($stmt->execute()) {
-            echo "<script>alert('Pendaftaran berhasil! Silakan login.'); window.location.href='login.php';</script>";
+            echo "<script>alert('Pendaftaran berhasil! Silakan login.'); window.location.href='index.php';</script>";
         } else {
             echo "<script>alert('Gagal mendaftar. Silakan coba lagi.');</script>";
         }
     }
 }
 ?>
+
 </body>
 </html>

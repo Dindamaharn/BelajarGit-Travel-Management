@@ -11,7 +11,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 70px;
+  width: 180px;
   background-color: #111;
   color: #fff;
   display: flex;
@@ -36,9 +36,13 @@ body {
 }
 
 .sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* jarak antara ikon dan teks */
   color: #fff;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .sidebar a:hover {
@@ -79,4 +83,20 @@ body {
 
 .content {
   margin-top: 30px;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-wrapper img {
+  height: 90px;
+}
+
+.logo-text {
+  font-size: 15px;
+  color: white;
+  transform: translateX(-20px);
 }
