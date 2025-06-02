@@ -5,6 +5,54 @@ if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 $username = $_SESSION['user_name'];
+
+include '../includes/db.php'; // Koneksi database
+
+// Update status jika ada permintaan konfirmasi atau cancel
+if (isset($_GET['confirm']) && is_numeric($_GET['confirm'])) {
+    $order_id = intval($_GET['confirm']);
+    $update = mysqli_query($conn, "UPDATE orders SET status = 'canceled' WHERE id = $order_id");
+    if ($update) {
+        header("Location: transaction.php");
+        exit();
+    } else {
+        echo "Gagal update status confirmed: " . mysqli_error($conn);
+        exit();
+    }
+}
+
+if (isset($_GET['cancel']) && is_numeric($_GET['cancel'])) {
+    $order_id = intval($_GET['cancel']);
+    $update = mysqli_query($conn, "UPDATE orders SET status = 'cancel' WHERE id = $order_id");
+    if ($update) {
+        header("Location: transaction.php");
+        exit();
+    } else {
+        echo "Gagal update status cancel: " . mysqli_error($conn);
+        exit();
+    }
+}
+
+// Query ambil data orders + join travel_packages
+$query = "
+SELECT 
+    orders.id AS order_id,
+    orders.user_id,
+    travel_packages.name AS package_name,
+    travel_packages.price AS seat_price,
+    orders.total_people,
+    orders.total_price,
+    orders.metode_pembayaran,
+    orders.bukti_bayar,
+    orders.status
+FROM orders
+JOIN travel_packages ON orders.package_id = travel_packages.id
+ORDER BY orders.id DESC
+";
+$result = mysqli_query($conn, $query);
+if (!$result) {
+    die("Query error: " . mysqli_error($conn));
+}
 ?>
 
 <!DOCTYPE html>
@@ -14,12 +62,46 @@ $username = $_SESSION['user_name'];
   <title>Transaction</title>
   <link rel="stylesheet" href="../css/admin/dashboard.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      text-align: center;
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+    img {
+      border-radius: 4px;
+    }
+    .status-confirmed {
+      color: green;
+      font-weight: bold;
+    }
+    .status-cancel {
+      color: red;
+      font-weight: bold;
+    }
+    .status-pending {
+      color: orange;
+      font-weight: bold;
+    }
+    a.action-link {
+      margin: 0 5px;
+      text-decoration: none;
+      color: #007bff;
+    }
+    a.action-link:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
   <!-- Sidebar -->
- <div class="sidebar">
+  <div class="sidebar">
     <div class="logo-wrapper">
       <img src="../img/logoputih.png" alt="Logo Kiran" />
       <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
@@ -38,7 +120,7 @@ $username = $_SESSION['user_name'];
     <div class="topbar">
       <div class="greeting">
         <p>Hello</p>
-        <h3><?php echo htmlspecialchars($username); ?></h3>
+        <h3><?= htmlspecialchars($username); ?></h3>
       </div>
       <div class="user-icon">
         <img src="https://via.placeholder.com/40" alt="User" class="avatar" />
@@ -47,7 +129,68 @@ $username = $_SESSION['user_name'];
 
     <div class="content">
       <h2>Transaction</h2>
-      <!-- Isi konten khusus manage user di sini -->
+      
+      <table>
+        <thead>
+          <tr>
+            <th>ID Pesanan</th>
+            <th>ID User</th>
+            <th>Nama Paket</th>
+            <th>Harga Kursi</th>
+            <th>Total Orang</th>
+            <th>Total Harga</th>
+            <th>Metode Pembayaran</th>
+            <th>Bukti Bayar</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+          <tr>
+            <td><?= $row['order_id']; ?></td>
+            <td><?= $row['user_id']; ?></td>
+            <td><?= htmlspecialchars($row['package_name']); ?></td>
+            <td>Rp<?= number_format($row['seat_price'], 0, ',', '.'); ?></td>
+            <td><?= $row['total_people']; ?></td>
+            <td>Rp<?= number_format($row['total_price'], 0, ',', '.'); ?></td>
+            <td><?= htmlspecialchars($row['metode_pembayaran']); ?></td>
+            <td>
+              <?php if ($row['bukti_bayar']) : ?>
+                <a href="../uploads/<?= rawurlencode($row['bukti_bayar']); ?>" target="_blank">Lihat</a><br />
+                <img src="../uploads/<?= rawurlencode($row['bukti_bayar']); ?>" alt="Bukti Bayar" style="max-width:100px; max-height:100px; margin-top:5px;" />
+              <?php else : ?>
+                Tidak ada
+              <?php endif; ?>
+            </td>
+            <td>
+              <?php
+                $status = $row['status'];
+                if ($status === 'confirmed') {
+                  echo '<span class="status-confirmed">Confirmed</span>';
+                } elseif ($status === 'cancel') {
+                  echo '<span class="status-cancel">Cancelled</span>';
+                } else {
+                  echo '<span class="status-pending">Pending</span>';
+                }
+              ?>
+            </td>
+            <td>
+              <?php 
+                if ($status === 'pending' || $status === 'waiting') : ?>
+                  <a class="action-link" href="transaction.php?confirm=<?= $row['order_id']; ?>" onclick="return confirm('Yakin konfirmasi pesanan ini?')">Konfirmasi</a> | 
+                  <a class="action-link" href="transaction.php?cancel=<?= $row['order_id']; ?>" onclick="return confirm('Yakin batalkan pesanan ini?')">Cancel</a>
+              <?php elseif ($status === 'confirmed') : ?>
+                  <span class="status-confirmed">Confirmed</span>
+              <?php else : ?>
+                  <span class="status-cancel">Cancelled</span>
+              <?php endif; ?>
+            </td>
+          </tr>
+        <?php endwhile; ?>
+        </tbody>
+      </table>
+
     </div>
   </div>
 </div>
