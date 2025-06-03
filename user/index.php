@@ -1,37 +1,81 @@
 <?php
 session_start();
-
-// Include koneksi database
 include '../includes/db.php';
 
-// Ambil data unik untuk dropdown asal dan tujuan dari tabel travel_packages
+// Ambil data dropdown
 $asal_result = $conn->query("SELECT DISTINCT departure_location FROM travel_packages WHERE departure_location IS NOT NULL");
 $tujuan_result = $conn->query("SELECT DISTINCT destination FROM travel_packages WHERE destination IS NOT NULL");
 
-// Inisialisasi variabel hasil dan pilihan asal/tujuan
+// Inisialisasi variabel
 $hasil = null;
-$asal = "";
-$tujuan = "";
+$asal = $_POST['asal'] ?? '';
+$tujuan = $_POST['tujuan'] ?? '';
+$departure_date = $_POST['departure_date'] ?? '';
+$return_date = $_POST['return_date'] ?? '';
+$form_type = $_POST['form_type'] ?? '';
 
-// Proses pencarian paket ketika form dikirim dengan metode POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari form
-    $asal = $_POST["asal"];
-    $tujuan = $_POST["tujuan"];
+    // Validasi input
+    if (!empty($asal) && !empty($tujuan) && !empty($departure_date)) {
 
-    // Query dengan prepared statement untuk keamanan dari SQL Injection
-    $query = "SELECT * FROM travel_packages 
-              WHERE departure_location = ? 
-              AND destination = ? 
-              AND available_seats > 0 
-              AND departure_date >= CURDATE()";
+        if ($form_type === 'roundtrip') {
+            // ✅ LOGIKA PULANG PERGI
+            if (!empty($return_date)) {
+              if ($form_type === 'roundtrip') {
+  $asal = $_POST['asal'] ?? '';
+  $tujuan = $_POST['tujuan'] ?? '';
+$departure_date = $_POST['departure_date'] ?? '';
+$return_date = $_POST['return_date'] ?? '';
 
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ss", $asal, $tujuan);
-    $stmt->execute();
-    $hasil = $stmt->get_result();
+// Tambah 1 hari (atau bisa ubah menjadi -1 day jika ingin mundur)
+if (!empty($departure_date)) {
+    $depDateObj = new DateTime($departure_date);
+    $depDateObj->modify('+1 day'); // atau '-1 day' untuk mundur
+    $departure_date = $depDateObj->format('Y-m-d');
+}
+
+if (!empty($return_date)) {
+    $retDateObj = new DateTime($return_date);
+    $retDateObj->modify('+1 day'); // atau '-1 day' untuk mundur
+    $return_date = $retDateObj->format('Y-m-d');
+}
+
+}
+
+                $query = "SELECT * FROM travel_packages 
+                          WHERE departure_location = ? 
+                          AND destination = ? 
+                          AND departure_date = ? 
+                          AND return_date = ? 
+                          AND available_seats > 0";
+
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param("ssss", $asal, $tujuan, $departure_date, $return_date);
+                $stmt->execute();
+                $hasil = $stmt->get_result();
+
+            }
+
+        } else {
+            // ✅ LOGIKA SEKALI JALAN
+            $query = "SELECT * FROM travel_packages 
+                      WHERE departure_location = ? 
+                      AND destination = ? 
+                      AND departure_date = ? 
+                      AND available_seats > 0";
+
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("sss", $asal, $tujuan, $departure_date);
+            $stmt->execute();
+            $hasil = $stmt->get_result();
+        }
+
+    }
 }
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -96,7 +140,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Form Sekali Jalan -->
     <form method="POST" action="" class="search-box" id="form-oneway" style="display: flex;">
       <div class="search-group">
-         
+         <input type="hidden" name="form_type" value="oneway">
+
         <label>Berangkat Dari</label>
         <select name="asal" required>
           <option value="">-- Pilih Asal --</option>
@@ -145,59 +190,124 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <button type="submit" class="btn-cari"><i class="fa fa-search"></i> Cari</button>
     </form>
 
-    <!-- Form Pulang Pergi -->
-    <form method="POST" action="" class="search-box" id="form-roundtrip" style="display: none;">
-      <div class="search-group">
-        <label>Berangkat Dari</label>
-        <div class="input-wrapper">
-          <i class="fa fa-location-dot"></i>
-          <input type="text" value="Bandung" readonly />
-        </div>
-      </div>
+ <!-- ✅ Form Pulang Pergi -->
+<form method="POST" action="" class="search-box" id="form-roundtrip" style="display: none;">
+  <input type="hidden" name="form_type" value="roundtrip">
 
-      <button type="button" class="swap-btn" title="Tukar Asal & Tujuan" id="swap-roundtrip">
-        <i class="fa fa-right-left"></i>
-      </button>
+  <div class="search-group">
+    <label>Berangkat Dari</label>
+    <select name="asal" required>
+      <option value="">-- Pilih Asal --</option>
+      <?php
+      $asal_result->data_seek(0);
+      while ($row = $asal_result->fetch_assoc()): ?>
+        <option value="<?= htmlspecialchars($row['departure_location']) ?>" <?= $asal == $row['departure_location'] ? 'selected' : '' ?>>
+          <?= htmlspecialchars($row['departure_location']) ?>
+        </option>
+      <?php endwhile; ?>
+    </select>
+  </div>
 
-      <div class="search-group">
-        <label>Untuk Tujuan</label>
-        <div class="input-wrapper">
-          <i class="fa fa-location-dot"></i>
-          <input type="text" value="Jakarta" readonly />
-        </div>
-      </div>
+  <button type="button" class="swap-btn" title="Tukar Asal & Tujuan" id="swap-roundtrip">
+    <i class="fa fa-right-left"></i>
+  </button>
 
-      <div class="search-group">
-        <label>Tanggal Pulang Pergi</label>
-        <div class="input-wrapper">
-          <i class="fa fa-calendar-days"></i>
-          <input type="text" id="display-range" readonly placeholder="Pilih tanggal" />
-          <input type="hidden" id="departure-date" name="departure_date" />
-          <input type="hidden" id="return-date" name="return_date" />
-        </div>
-      </div>
+  <div class="search-group">
+    <label>Untuk Tujuan</label>
+    <select name="tujuan" required>
+      <option value="">-- Pilih Tujuan --</option>
+      <?php
+      $tujuan_result->data_seek(0);
+      while ($row = $tujuan_result->fetch_assoc()): ?>
+        <option value="<?= htmlspecialchars($row['destination']) ?>" <?= $tujuan == $row['destination'] ? 'selected' : '' ?>>
+          <?= htmlspecialchars($row['destination']) ?>
+        </option>
+      <?php endwhile; ?>
+    </select>
+  </div>
 
-      <button type="submit" class="btn-cari"><i class="fa fa-search"></i> Cari</button>
-    </form>
+  <div class="search-group">
+    <label>Tanggal Pulang Pergi</label>
+    <div class="input-wrapper">
+      <i class="fa fa-calendar-days"></i>
+      <input type="text" id="display-range" readonly placeholder="Pilih tanggal" />
+      <input type="hidden" id="departure-date" name="departure_date" value="<?= htmlspecialchars($departure_date ?? '') ?>" />
+      <input type="hidden" id="return-date" name="return_date" value="<?= htmlspecialchars($return_date ?? '') ?>" />
+    </div>
+  </div>
+
+  <button type="submit" class="btn-cari"><i class="fa fa-search"></i> Cari</button>
+</form>
+   
+
+
   </div>
 </section>
 
 <!-- Tampilkan hasil pencarian -->
-<?php if ($hasil !== null): ?>
+<?php if ($hasil !== null):echo";" ?>
 <section class="search-results container" style="padding: 20px;">
   <h3>Hasil Pencarian:</h3>
   <?php if ($hasil->num_rows > 0): ?>
     <ul>
-      <?php while ($row = $hasil->fetch_assoc()): ?>
-        <li style="margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-          <strong><?= htmlspecialchars($row['name']) ?></strong><br>
-          Tanggal Berangkat: <?= htmlspecialchars($row['departure_date']) ?><br>
-          Jenis Trip: <?= htmlspecialchars($row['trip_type']) ?><br>
-          Harga: Rp<?= number_format($row['price'], 2, ',', '.') ?><br>
-          Kursi Tersedia: <?= htmlspecialchars($row['available_seats']) ?><br>
-          <a href="order.php?id=<?= urlencode($row['id']) ?>" class="btn-pesan">Pesan</a>
-        </li>
-      <?php endwhile; ?>
+<?php while ($row = $hasil->fetch_assoc()): ?>
+  <li style="
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #f9f9f9;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    list-style: none;
+  ">
+    <h4 style="margin-bottom: 8px; color: #2c3e50;">
+      <?= htmlspecialchars($row['name']) ?>
+    </h4>
+    
+    <p style="margin: 4px 0;">
+      <strong>Tanggal Berangkat:</strong>
+      <?= htmlspecialchars($row['departure_date']) ?>
+    </p>
+
+    <?php if (!empty($row['return_date'])): ?>
+    <p style="margin: 4px 0;">
+      <strong>Tanggal Kembali:</strong>
+      <?= htmlspecialchars($row['return_date']) ?>
+    </p>
+    <?php endif; ?>
+
+    <p style="margin: 4px 0;">
+      <strong>Jenis Trip:</strong>
+      <?= htmlspecialchars($row['trip_type']) ?>
+    </p>
+
+    <p style="margin: 4px 0;">
+      <strong>Harga:</strong>
+      Rp<?= number_format($row['price'], 2, ',', '.') ?>
+    </p>
+
+    <p style="margin: 4px 0;">
+      <strong>Kursi Tersedia:</strong>
+      <?= htmlspecialchars($row['available_seats']) ?>
+    </p>
+
+    <a href="order.php?id=<?= urlencode($row['id']) ?>" class="btn-pesan"
+       style="
+         display: inline-block;
+         margin-top: 10px;
+         padding: 8px 14px;
+         background-color: #3498db;
+         color: white;
+         text-decoration: none;
+         border-radius: 5px;
+         transition: background-color 0.2s;
+       "
+       onmouseover="this.style.backgroundColor='#2980b9';"
+       onmouseout="this.style.backgroundColor='#3498db';"
+    >Pesan</a>
+  </li>
+<?php endwhile; ?>
+
     </ul>
   <?php else: ?>
     <p>Maaf, tidak ada paket perjalanan yang cocok ditemukan.</p>
@@ -388,18 +498,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   });
 
   // Inisialisasi flatpickr untuk input tanggal range (pulang pergi)
-  flatpickr("#display-range", {
-    mode: "range",
-    dateFormat: "d-m-Y",
-    minDate: "today",
-    onChange: function(selectedDates, dateStr, instance) {
-      if (selectedDates.length === 2) {
-        // Isi input hidden tanggal berangkat dan pulang
-        document.getElementById('departure-date').value = selectedDates[0].toISOString().slice(0,10);
-        document.getElementById('return-date').value = selectedDates[1].toISOString().slice(0,10);
-      }
+function formatToYMD(date) {
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+  return `${year}-${month}-${day}`;
+}
+
+flatpickr("#display-range", {
+  mode: "range",
+  dateFormat: "d-m-Y",
+  minDate: "today",
+  onChange: function(selectedDates) {
+    if (selectedDates.length === 2) {
+      document.getElementById('departure-date').value = formatToYMD(selectedDates[0]);
+      document.getElementById('return-date').value = formatToYMD(selectedDates[1]);
     }
-  });
+  },
+  onClose: function(selectedDates) {
+    if (selectedDates.length === 2) {
+      document.getElementById('departure-date').value = formatToYMD(selectedDates[0]);
+      document.getElementById('return-date').value = formatToYMD(selectedDates[1]);
+    }
+  }
+});
+
+
+
 
   // Tombol tukar asal dan tujuan
   const swapButtons = document.querySelectorAll('.swap-btn');
