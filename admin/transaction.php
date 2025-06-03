@@ -60,41 +60,10 @@ if (!$result) {
 <head>
   <meta charset="UTF-8" />
   <title>Transaction</title>
-  <link rel="stylesheet" href="../css/admin/dashboard.css" />
+  <link rel="stylesheet" href="../css/admin/transaction.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    table {
-      border-collapse: collapse;
-      width: 100%;
-    }
-    th, td {
-      text-align: center;
-      padding: 8px;
-      border: 1px solid #ddd;
-    }
-    img {
-      border-radius: 4px;
-    }
-    .status-confirmed {
-      color: green;
-      font-weight: bold;
-    }
-    .status-cancel {
-      color: red;
-      font-weight: bold;
-    }
-    .status-pending {
-      color: orange;
-      font-weight: bold;
-    }
-    a.action-link {
-      margin: 0 5px;
-      text-decoration: none;
-      color: #007bff;
-    }
-    a.action-link:hover {
-      text-decoration: underline;
-    }
+    
   </style>
 </head>
 <body>
@@ -102,34 +71,33 @@ if (!$result) {
 <div class="container">
   <!-- Sidebar -->
   <div class="sidebar">
-    <div class="logo-wrapper">
-      <img src="../img/logoputih.png" alt="Logo Kiran" />
-      <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
-    </div>
-    <ul>
-      <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
-      <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
-      <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Manage Packages</span></a></li>
-      <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaction</span></a></li>
-      <li><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
-    </ul>
+  <div class="logo-wrapper">
+    <img src="../img/logoputih.png" alt="Logo Kiran" />
+    <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
   </div>
+  <ul>
+    <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+    <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
+    <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Manage Packages</span></a></li>
+    <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaction</span></a></li>
+    <li class="logout-item"><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+  </ul>
+</div>
 
   <!-- Main content -->
   <div class="main">
-    <div class="topbar">
-      <div class="greeting">
-        <p>Hello</p>
-        <h3><?= htmlspecialchars($username); ?></h3>
-      </div>
-      <div class="user-icon">
-        <img src="https://via.placeholder.com/40" alt="User" class="avatar" />
-      </div>
-    </div>
+    
 
     <div class="content">
       <h2>Transaction</h2>
-      
+      <form method="GET" action="transaction.php" style="margin-bottom: 20px;">
+      <input type="text" name="search" placeholder="Cari transaksi..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
+      <button type="submit"><i class="fas fa-search"></i> Cari</button>
+      <button type="button" onclick="window.location.href='transaction.php'" title="Refresh" style="cursor:pointer;">
+      <i class="fa-solid fa-rotate-right"></i>
+      </button>
+    </form>
+    
       <table>
         <thead>
           <tr>

@@ -10,6 +10,13 @@ body {
 }
 
 /* Sidebar */
+
+.sidebar ul .logout-item {
+  margin-top: 40px; 
+  border-top: 1px solid #444; 
+  padding-top: 20px; 
+}
+
 .sidebar {
   width: 180px;
   background-color: #111;
@@ -39,14 +46,9 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  /* jarak antara ikon dan teks */
   color: #fff;
   text-decoration: none;
   font-size: 15px;
-}
-
-.sidebar a:hover {
-  color: #f8edd9;
 }
 
 /* Main content */
@@ -55,89 +57,61 @@ body {
   padding: 20px;
 }
 
-/* Topbar */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #e9f0ff;
-  padding: 10px 20px;
-  border-radius: 10px;
-}
-
-.greeting p {
-  margin: 0;
-  font-size: 14px;
-  color: #666;
-}
-
-.greeting h3 {
-  margin: 0;
-}
-
-.user-icon .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.content {
-  margin-top: 30px;
-}
-
-.btn-add-package {
-  display: inline-block;
-  background-color: #28a745;
-  color: white;
-  padding: 10px 15px;
-  margin-bottom: 20px;
-  text-decoration: none;
+/* Form input dan button */
+form input[type="text"],
+.search-input {
+  padding: 5px 10px;
   border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  width: 300px;
 }
 
-.btn-add-package:hover {
-  background-color: #218838;
+form button,
+.btn-add-package {
+  padding: 5px 10px;
+  border: none;
+  padding: 10px 20px;
+  background-color: #000;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+
 }
 
+/* Tabel styling */
 .packages-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-}
-
-.packages-table th,
-.packages-table td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
+  font-size: 15px;
 }
 
 .packages-table th {
-  background-color: #f8edd9;
-}
-
-.packages-table tbody tr:hover {
-  background-color: #f2f2f2;
-}
-
-.btn-edit,
-.btn-delete {
-  padding: 5px 8px;
-  margin: 2px;
-  text-decoration: none;
-  border-radius: 5px;
-}
-
-.btn-edit {
-  background-color: #ffd700;
-  color: #000;
-}
-
-.btn-delete {
-  background-color: #dd5c36;
+  background-color: #000;
   color: #fff;
+  padding: 12px;
+  border: none;
 }
 
+.packages-table td {
+  padding: 12px;
+  border: none;
+  text-align: center;
+}
+
+/* Striping untuk baris ganjil dan genap */
+.packages-table tbody tr:nth-child(odd) {
+  background-color: #f0f4ff;
+}
+
+.packages-table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+/* Logo */
 .logo-wrapper {
   display: flex;
   align-items: center;

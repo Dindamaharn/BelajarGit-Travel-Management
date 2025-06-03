@@ -5,6 +5,69 @@ body {
     background: #f8f8f8;
 }
 
+/* Header */
+.header {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+    padding: 0px 0;
+    background: rgb(255, 255, 255);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* 👈 bayangan bawah */
+}
+
+.header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-wrapper img {
+    height: 90px;
+}
+
+.logo-text {
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.nav-left a,
+.nav-right a {
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+}
+
+.nav-right {
+    margin-left: 300px;
+    /* Ini yang mendorong ke kanan */
+}
+
+.btn-daftar {
+    background-color: #f8a500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: white;
+}
+
 .help-container {
     display: flex;
     align-items: center;

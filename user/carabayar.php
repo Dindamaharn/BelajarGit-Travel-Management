@@ -39,7 +39,8 @@
     
     <div class="search-bar">
       <i class="fas fa-search"></i>
-      <input type="text" placeholder="Ketik pembayaran untuk mencari">
+      <input type="text" id="searchInput" placeholder="Ketik pembayaran untuk mencari">
+
     </div>
 
     <div class="payment-list">

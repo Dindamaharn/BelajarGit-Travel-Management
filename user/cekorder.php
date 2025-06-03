@@ -1,28 +1,5 @@
 <?php
-session_start();
-include '../includes/db.php';
-
-$showResult = false;
-$error = '';
-$order = null;
-
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['orderId']) && isset($_GET['contact'])) {
-    $orderId = $conn->real_escape_string($_GET['orderId']);
-    $contact = $conn->real_escape_string($_GET['contact']);
-
-    $sql = "SELECT package_id, nama_paket, jumlah_kursi, status 
-            FROM orders 
-            WHERE package_id = '$orderId' AND (email = '$contact' OR no_telp = '$contact')";
-
-    $result = $conn->query($sql);
-
-    if ($result && $result->num_rows > 0) {
-        $order = $result->fetch_assoc();
-        $showResult = true;
-    } else {
-        $error = "Data pesanan tidak ditemukan. Pastikan ID dan kontak sudah benar.";
-    }
-}
+// Tidak perlu koneksi database karena data ditampilkan statis
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -30,6 +7,31 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['orderId']) && isset($_GE
     <meta charset="UTF-8">
     <title>Cek Pesanan - Kiran Travel</title>
     <link rel="stylesheet" href="../css/user/cekorder.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            font-size: 14px;
+        }
+
+        .status-paid {
+            background-color: #28a745; /* Hijau */
+        }
+
+        .status-pending {
+            background-color: #ffc107; /* Kuning */
+            color: #000;
+        }
+
+        .status-cancelled {
+            background-color: #dc3545; /* Merah */
+        }
+    </style>
 </head>
 <body>
 <header class="header">
@@ -64,8 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['orderId']) && isset($_GE
 
         <!-- Kanan: Form -->
         <div class="cek-form">
-            <h2>Cek Pesanan</h2>
-            <form action="cekorder.php" method="GET">
+            <h2>Cek Order</h2>
+            <form id="cekForm">
                 <label for="orderId">ID Pemesanan</label>
                 <input type="text" id="orderId" name="orderId" placeholder="Masukkan ID Pemesanan" required />
 
@@ -75,19 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['orderId']) && isset($_GE
                 <button type="submit" class="btn-cek">Cek Pesanan</button>
             </form>
 
-            <?php if ($error): ?>
-                <p style="color:red; margin-top:10px;"><?= $error ?></p>
-            <?php endif; ?>
-
-            <?php if ($showResult && $order): ?>
-                <div class="hasil-pesanan" style="margin-top:20px;">
-                    <h3>Detail Pesanan:</h3>
-                    <p><strong>ID Pemesanan:</strong> <?= htmlspecialchars($order['packages_id']) ?></p>
-                    <p><strong>Nama Paket:</strong> <?= htmlspecialchars($order['nama_paket']) ?></p>
-                    <p><strong>Jumlah Kursi:</strong> <?= htmlspecialchars($order['jumlah_kursi']) ?></p>
-                    <p><strong>Status:</strong> <?= htmlspecialchars($order['status']) ?></p>
-                </div>
-            <?php endif; ?>
+            <div id="result" style="margin-top:20px;"></div>
         </div>
     </div>
 </section>
@@ -116,5 +106,40 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['orderId']) && isset($_GE
         <p>© 2025 PT Trans Kiran Travel. All Rights Reserved.</p>
     </div>
 </footer>
+
+<script>
+    document.getElementById('cekForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const orderId = document.getElementById('orderId').value;
+        const contact = document.getElementById('contact').value;
+        const resultDiv = document.getElementById('result');
+
+        // Simulasi data statis
+        const dummyData = {
+            id: orderId,
+            contact: contact,
+            total_people: 3,
+            status: 'Menunggu Pembayaran' // Ganti ke 'Sudah Dibayar' atau 'Dibatalkan' untuk uji coba
+        };
+
+        let statusClass = '';
+        if (dummyData.status === 'Sudah Dibayar') {
+            statusClass = 'status-badge status-paid';
+        } else if (dummyData.status === 'Menunggu Pembayaran') {
+            statusClass = 'status-badge status-pending';
+        } else if (dummyData.status === 'Dibatalkan') {
+            statusClass = 'status-badge status-cancelled';
+        }
+
+        resultDiv.innerHTML = `
+            <div class="hasil-pesanan">
+                <h3>Detail Pesanan:</h3>
+                <p><strong>ID Pemesanan:</strong> ${dummyData.id}</p>
+                <p><strong>Jumlah Kursi:</strong> ${dummyData.total_people}</p>
+                <p><strong>Status:</strong> <span class="${statusClass}">${dummyData.status}</span></p>
+            </div>
+        `;
+    });
+</script>
 </body>
 </html>

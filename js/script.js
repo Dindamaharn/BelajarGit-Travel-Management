@@ -56,3 +56,18 @@ document.addEventListener("DOMContentLoaded", function () {
         },
     });
 });
+
+// search pembayaran
+// Ambil elemen input dan semua payment-item
+const searchInput = document.getElementById("searchInput");
+const paymentItems = document.querySelectorAll(".payment-item");
+
+// Jalankan filter saat user mengetik
+searchInput.addEventListener("keyup", function () {
+    const filter = searchInput.value.toLowerCase();
+
+    paymentItems.forEach(function (item) {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(filter) ? "block" : "none";
+    });
+});

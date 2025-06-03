@@ -1,24 +1,89 @@
+/* Container Utama */
+.form-container {
+    width: 500px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #000;
+}
+
+/* Judul Form */
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #111;
+}
+
+/* Group Form */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Label */
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #222;
+}
+
+/* Input, Select, Textarea */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #000;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #000;
+    background-color: #f9f9f9;
+    outline: none;
+}
+
+/* Tombol Aksi */
 .form-actions {
-  margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
 }
 
-.form-actions button,
-.form-actions .cancel-btn {
-  padding: 10px 16px;
-  font-size: 16px;
-  border: none;
-  margin-right: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
+/* Tombol Submit */
 .form-actions button {
-  background-color: #28a745;
-  color: white;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.form-actions .cancel-btn {
-  background-color: #dc3545;
-  color: white;
+.form-actions button:hover {
+    background-color: #333;
+}
+
+/* Tombol Batal */
+.cancel-btn {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.cancel-btn:hover {
+    color: #000;
 }

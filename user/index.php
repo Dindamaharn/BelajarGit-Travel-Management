@@ -61,9 +61,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="bantuan.php">Bantuan</a>
         <a href="carabayar.php">Cara Bayar</a>
       </div>
+      
       <div class="nav-right">
         <?php if (isset($_SESSION['user_id'])): ?>
         <div class="user-dropdown">
+           <a href="cekorder.php">Cek Order</a>
           <button class="dropdown-btn">
             <?= !empty($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'User' ?> <i class="fa fa-caret-down"></i>
           </button>
@@ -94,6 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Form Sekali Jalan -->
     <form method="POST" action="" class="search-box" id="form-oneway" style="display: flex;">
       <div class="search-group">
+         
         <label>Berangkat Dari</label>
         <select name="asal" required>
           <option value="">-- Pilih Asal --</option>
@@ -108,12 +111,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </select>
       </div>
 
+
       <button type="button" class="swap-btn" title="Tukar Asal & Tujuan" id="swap-oneway">
         <i class="fa fa-right-left"></i>
       </button>
 
       <div class="search-group">
         <label>Untuk Tujuan</label>
+         <div class="input-wrapper">
         <select name="tujuan" required>
           <option value="">-- Pilih Tujuan --</option>
           <?php
@@ -126,11 +131,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <?php endwhile; ?>
         </select>
       </div>
+      </div>
+
 
       <div class="search-group">
         <label>Tanggal Berangkat</label>
       <div class="input-wrapper">
-      <i class="fa fa-calendar-days"></i>
         <input type="date" id="departure-oneway" name="departure_date" required 
       value="<?= htmlspecialchars($departure_date ?? '') ?>" />
       </div>

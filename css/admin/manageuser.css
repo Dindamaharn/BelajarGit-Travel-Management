@@ -10,6 +10,13 @@ body {
 }
 
 /* Sidebar */
+
+.sidebar ul .logout-item {
+  margin-top: 40px; 
+  border-top: 1px solid #444; 
+  padding-top: 20px; 
+}
+
 .sidebar {
   width: 180px;
   background-color: #111;
@@ -55,36 +62,6 @@ body {
   padding: 20px;
 }
 
-/* Topbar */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #e9f0ff;
-  padding: 10px 20px;
-  border-radius: 10px;
-}
-
-.greeting p {
-  margin: 0;
-  font-size: 14px;
-  color: #666;
-}
-
-.greeting h3 {
-  margin: 0;
-}
-
-.user-icon .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.content {
-  margin-top: 30px;
-}
-
 form input[type="text"] {
   padding: 5px;
   border-radius: 5px;
@@ -94,14 +71,14 @@ form input[type="text"] {
 form button {
   padding: 5px 10px;
   border: none;
-  background-color: #2c3e50;
+  background-color: #000;
   color: white;
   border-radius: 5px;
   cursor: pointer;
 }
 
 form button:hover {
-  background-color: #34495e;
+  background-color: #000;
 }
 
 .logo-wrapper {
@@ -118,4 +95,40 @@ form button:hover {
   font-size: 15px;
   color: white;
   transform: translateX(-20px);
+}
+
+/* Tabel styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+thead {
+  background-color: #000;
+  color: #fff;
+}
+
+thead th {
+  padding: 12px;
+}
+
+tbody td {
+  padding: 12px;
+}
+
+/* Striping untuk baris ganjil dan genap */
+tbody tr:nth-child(odd) {
+  background-color: #f0f4ff;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+/* Hilangkan border */
+table, th, td {
+  border: none;
+  text-align: center;
 }

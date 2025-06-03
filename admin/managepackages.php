@@ -62,65 +62,31 @@ if ($search !== '') {
   <title>Manage Packages</title>
   <link rel="stylesheet" href="../css/admin/managepackages.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    /* Tambahan style untuk search bar dan refresh button */
-    .search-container {
-      margin-bottom: 15px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .search-input {
-      padding: 6px 10px;
-      font-size: 16px;
-      width: 300px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .btn-refresh {
-      padding: 7px 12px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #ddd;
-      border: 1px solid #aaa;
-      border-radius: 4px;
-      color: #333;
-      transition: background-color 0.3s ease;
-    }
-    .btn-refresh:hover {
-      background-color: #ccc;
-    }
-  </style>
 </head>
 <body>
-<a href="addpackage.php" class="btn-add-package">+ Add Package</a>
+<div class="btn-add-package-wrapper" style="position: relative;">
+  <a href="addpackage.php" class="btn-add-package" style="position: absolute; top: 20px; right: 20px;">
+    + Add Package
+  </a>
+</div>
+
 
 <div class="container">
-   <div class="sidebar">
-    <div class="logo-wrapper">
-      <img src="../img/logoputih.png" alt="Logo Kiran" />
-      <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
-    </div>
-    <ul>
-      <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
-      <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
-      <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Manage Packages</span></a></li>
-      <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaction</span></a></li>
-      <li><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
-    </ul>
+  <div class="sidebar">
+  <div class="logo-wrapper">
+    <img src="../img/logoputih.png" alt="Logo Kiran" />
+    <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
   </div>
+  <ul>
+    <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+    <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
+    <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Manage Packages</span></a></li>
+    <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaction</span></a></li>
+    <li class="logout-item"><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+  </ul>
+</div>
 
   <div class="main">
-    <div class="topbar">
-      <div class="greeting">
-        <p>Hello</p>
-        <h3><?php echo htmlspecialchars($username); ?></h3>
-      </div>
-      <div class="user-icon">
-        <img src="https://via.placeholder.com/40" alt="User" class="avatar" />
-      </div>
-    </div>
-
     <div class="content">
       <h2>Manage Packages</h2>
 
@@ -134,11 +100,13 @@ if ($search !== '') {
             value="<?php echo htmlspecialchars($search); ?>"
             autocomplete="off"
           />
-          <button type="submit" class="btn-search"><i class="fas fa-search"></i> Search</button>
+          <button type="submit" class="btn-search"><i class="fas fa-search"></i>Cari</button>
+          <button type="button" onclick="window.location.href='managepackages.php'" title="Refresh" class="btn-refresh">
+          <i class="fa-solid fa-rotate-right"></i>
+          </button>
+
         </form>
-        <button class="btn-refresh" onclick="window.location.href='managepackages.php'">
-          <i class="fas fa-sync-alt"></i> Refresh
-        </button>
+
       </div>
 
       <table class="packages-table">
@@ -171,8 +139,15 @@ if ($search !== '') {
                   echo "<td>Rp " . number_format($row['price'], 2, ',', '.') . "</td>";
                   echo "<td>" . htmlspecialchars($row['available_seats']) . "</td>";
                   echo "<td>
-                          <a href='editpackages.php?id=" . $row['id'] . "' class='btn-edit'><i class='fas fa-edit'></i></a>
-                          <button class='btn-delete' data-id='" . $row['id'] . "'><i class='fas fa-trash'></i></button>
+                        <a href='editpackages.php?id=" . $row['id'] . "' style='color: #007bff; text-decoration: none;'>
+                          <i class='fas fa-edit'></i>
+                        </a>
+                        <form method='POST' action='' style='display:inline;' onsubmit=\"return confirm('Yakin ingin menghapus paket ini?');\">
+                            <input type='hidden' name='delete_id' value='" . $row['id'] . "' />
+                            <button type='submit' style='background:none; border:none; color:red; cursor:pointer; padding:0; margin:0;'>
+                            <i class='fas fa-trash'></i>
+                            </button>
+                        </form>
                         </td>";
                   echo "</tr>";
               }

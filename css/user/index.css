@@ -58,7 +58,7 @@ html {
 }
 
 .nav-right {
-    margin-left: 300px;
+    margin-left: 195px;
     /* Ini yang mendorong ke kanan */
 }
 
@@ -69,6 +69,9 @@ html {
     color: white;
 }
 
+.dropdown-btn {
+    margin-left: 20px;
+}
 
 /* Hero Section */
 .hero {
@@ -134,12 +137,25 @@ html {
     border-radius: 20px;
     width: fit-content;
     margin: auto;
-    gap: 15px;
+    gap: 5px;
 }
 
 .search-group {
     display: flex;
     flex-direction: column;
+}
+
+.search-group select {
+    position: relative;
+    width: 260px;
+    width: 100%;
+    padding: 15px 12px 10px 34px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    font-weight: bold;
+    font-size: 14px;
+
 }
 
 .search-group label {
@@ -163,6 +179,8 @@ html {
     color: #1d64c2;
     transform: translateX(10px)translateY(-8px);
 }
+
+
 
 #daterange-input {
     width: 100%;
@@ -191,11 +209,12 @@ html {
     border-radius: 50%;
     padding: 10px;
     cursor: pointer;
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transform: translateY(10px);
 }
 
 .swap-btn i {
@@ -590,56 +609,132 @@ html {
 }
 
 .user-dropdown {
-      position: relative;
-      display: inline-block;
-    }
+    position: relative;
+    display: inline-block;
+}
 
-    .dropdown-btn {
-      background-color: #f9b234;
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.dropdown-btn {
+    background-color: #f9b234;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      background-color: #fff;
-      min-width: 120px;
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-      z-index: 1;
-      border-radius: 8px;
-      overflow: hidden;
-    }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    min-width: 120px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border-radius: 8px;
+    overflow: hidden;
+}
 
-    .dropdown-content a {
-      color: #333;
-      padding: 10px 15px;
-      text-decoration: none;
-      display: block;
-    }
+.dropdown-content a {
+    color: #333;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+}
 
-    .dropdown-content a:hover {
-      background-color: #f1f1f1;
-    }
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
 
-    .user-dropdown:hover .dropdown-content {
-      display: block;
-    }
+.user-dropdown:hover .dropdown-content {
+    display: block;
+}
 
-    .btn-daftar {
-      background-color: #f9b234;
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: bold;
-      text-decoration: none;
-    }
+.btn-daftar {
+    background-color: #f9b234;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-decoration: none;
+}
 
-    .btn-daftar:hover {
-      background-color: #e6a220;
-    }
+.btn-daftar:hover {
+    background-color: #e6a220;
+}
+
+/* hasil pencarian */
+.hasil-pencarian-container {
+    margin: 40px auto;
+    max-width: 1000px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.hasil-pencarian-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 24px;
+}
+
+.tiket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s ease;
+}
+
+.tiket-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.tiket-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 16px;
+}
+
+.tiket-info .waktu {
+    font-weight: bold;
+    color: #2d72d9;
+}
+
+.tiket-harga {
+    text-align: right;
+}
+
+.tiket-harga .harga {
+    font-size: 20px;
+    font-weight: bold;
+    color: #f49f1c;
+}
+
+.tiket-harga .pesan-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 18px;
+    background: #2d72d9;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.tiket-harga .pesan-btn:hover {
+    background: #1c54ab;
+}
+
+.no-result {
+    text-align: center;
+    font-size: 18px;
+    color: #999;
+    margin-top: 40px;
+}

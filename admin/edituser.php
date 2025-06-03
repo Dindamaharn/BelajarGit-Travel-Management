@@ -60,27 +60,37 @@ if (!$user) {
 <head>
     <meta charset="UTF-8">
     <title>Edit User</title>
-    <link rel="stylesheet" href="../css/admin/dashboard.css">
+    <link rel="stylesheet" href="../css/admin/edituser.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-<div class="container">
-    <div class="main">
+<div class="edit-container">
+    <div class="edit-card">
         <h2>Edit User</h2>
         <?php if (isset($error)): ?>
-            <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+            <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
         <?php endif; ?>
-        <form method="POST" action="">
-            <label>Nama:</label><br>
-            <input type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" required><br><br>
 
-            <label>Email:</label><br>
-            <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required><br><br>
+        <form method="POST" class="edit-form">
+            <div class="form-group">
+                <label for="name">Nama:</label>
+                <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user['name']); ?>" required>
+            </div>
 
-            <label>Telepon:</label><br>
-            <input type="text" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>"><br><br>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+            </div>
 
-            <button type="submit">Simpan Perubahan</button>
-            <a href="manageuser.php">Batal</a>
+            <div class="form-group">
+                <label for="phone">Telepon:</label>
+                <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-save">Simpan Perubahan</button>
+                <a href="manageuser.php" class="btn btn-cancel">Batal</a>
+            </div>
         </form>
     </div>
 </div>

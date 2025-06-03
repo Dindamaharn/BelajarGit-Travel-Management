@@ -10,6 +10,13 @@ body {
 }
 
 /* Sidebar */
+
+.sidebar ul .logout-item {
+  margin-top: 40px; 
+  border-top: 1px solid #444; 
+  padding-top: 20px; 
+}
+
 .sidebar {
   width: 180px;
   background-color: #111;
@@ -55,16 +62,6 @@ body {
   padding: 20px;
 }
 
-/* Topbar */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #e9f0ff;
-  padding: 10px 20px;
-  border-radius: 10px;
-}
-
 .greeting p {
   margin: 0;
   font-size: 14px;
@@ -100,3 +97,107 @@ body {
   color: white;
   transform: translateX(-20px);
 }
+
+table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      text-align: center;
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+    img {
+      border-radius: 4px;
+    }
+    .status-confirmed {
+      color: green;
+      font-weight: bold;
+    }
+    .status-cancel {
+      color: red;
+      font-weight: bold;
+    }
+    .status-pending {
+      color: orange;
+      font-weight: bold;
+    }
+    a.action-link {
+      margin: 0 5px;
+      text-decoration: none;
+      color: #007bff;
+    }
+    a.action-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Tabel styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+thead {
+  background-color: #000;
+  color: #fff;
+}
+
+thead th {
+  padding: 12px;
+  text-align: center;
+}
+
+tbody td {
+  padding: 12px;
+}
+
+/* Striping untuk baris ganjil dan genap */
+tbody tr:nth-child(odd) {
+  background-color: #f0f4ff;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+/* Hilangkan border */
+table, th, td {
+  border: none;
+}
+form input[type="text"] {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+form button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #000;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #000;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-wrapper img {
+  height: 90px;
+}
+
+.logo-text {
+  font-size: 15px;
+  color: white;
+  transform: translateX(-20px);
+}
+

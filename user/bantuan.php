@@ -10,6 +10,27 @@
 </head>
 <body>
 
+<header class="header">
+    <div class="container">
+        <div class="logo-wrapper">
+            <img src="../img/logowarna.jpg" alt="Logo Kiran">
+            <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
+        </div>
+        <nav class="navbar">
+            <div class="nav-left">
+                <a href="index.php">Beranda</a>
+                <a href="bantuan.php">Bantuan</a>
+                <a href="carabayar.php">Cara Bayar</a>
+            </div>
+            <div class="nav-right">
+                <a href="cekorder.php">Cek Order</a>
+                <a href="login.php">Masuk</a>
+                <a href="register.php" class="btn-daftar">Daftar</a>
+            </div>
+        </nav>
+    </div>
+</header>
+
   <div class="help-container">
     <div class="help-box">
       <img src="../img/logowarna.png" alt="Logo Kiran" class="help-logo">

@@ -34,39 +34,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 <div class="container">
   <!-- Sidebar -->
   <div class="sidebar">
-    <div class="logo-wrapper">
-      <img src="../img/logoputih.png" alt="Logo Kiran" />
-      <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
-    </div>
-    <ul>
-      <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
-      <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
-      <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Manage Packages</span></a></li>
-      <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaction</span></a></li>
-      <li><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
-    </ul>
+  <div class="logo-wrapper">
+    <img src="../img/logoputih.png" alt="Logo Kiran" />
+    <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
   </div>
+  <ul>
+    <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+    <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
+    <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Manage Packages</span></a></li>
+    <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaction</span></a></li>
+    <li class="logout-item"><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+  </ul>
+</div>
 
   <!-- Main content -->
   <div class="main">
-    <div class="topbar">
-      <div class="greeting">
-        <p>Hello</p>
-        <h3><?php echo htmlspecialchars($username); ?></h3>
-      </div>
-      <div class="user-icon">
-        <img src="https://via.placeholder.com/40" alt="User" class="avatar" />
-      </div>
-    </div>
-
-   <div class="content">
+  <div class="content">
   <h2>Manage Users</h2>
 
   <form method="GET" action="manageuser.php" style="margin-bottom: 20px;">
   <input type="text" name="search" placeholder="Cari pengguna..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
   <button type="submit"><i class="fas fa-search"></i> Cari</button>
-  <button type="button" onclick="window.location.href='manageuser.php'">Refresh</button>
-</form>
+  <button type="button" onclick="window.location.href='manageuser.php'" title="Refresh" style="cursor:pointer;">
+  <i class="fa-solid fa-rotate-right"></i>
+  </button>
+  </form>
 
   <table border="1" cellpadding="10" cellspacing="0">
     <thead>
@@ -92,8 +84,6 @@ if ($search !== '') {
     $result = $conn->query("SELECT id, name, email, phone FROM users");
 }
 
-     
-
       if ($result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
               echo "<tr>";
@@ -102,7 +92,9 @@ if ($search !== '') {
               echo "<td>" . htmlspecialchars($row['email']) . "</td>";
               echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
               echo "<td>
-                      <a href='edituser.php?id=" . $row['id'] . "'><i class='fas fa-edit'></i></a>
+                      <a href='edituser.php?id=" . $row['id'] . "' style='color: #007bff;'>
+                      <i class='fas fa-edit'></i>
+                      </a>
                       &nbsp;
                       <form method='POST' action='' style='display:inline;' onsubmit=\"return confirm('Yakin ingin menghapus user ini?');\">
                         <input type='hidden' name='delete_id' value='" . $row['id'] . "' />
