@@ -276,17 +276,19 @@ if (!empty($return_date)) {
           </h4>
 
           <?php
+          if (!function_exists('labelValueWithIcon')) {
           function labelValueWithIcon($label, $value, $iconSvg) {
-          return '
-          <div style="display: flex; align-items: center; margin: 6px 0; font-size: 16px; font-family: Arial, sans-serif; color: #444;">
-              <span style="margin-right: 10px;">' . $iconSvg . '</span>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-              <span style="min-width: 140px; display: inline-block; color: #333; font-weight: 500;">' . $label . '</span>
-              <span style="font-weight: 500;">:</span>
-            <span>' . $value . '</span>
-          </div>
-          </div>
-          ';
+            return '
+              <div style="display: flex; align-items: center; margin: 6px 0; font-size: 16px; font-family: Arial, sans-serif; color: #444;">
+                <span style="margin-right: 10px;">' . $iconSvg . '</span>
+                  <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <span style="min-width: 140px; display: inline-block; color: #333; font-weight: 500;">' . $label . '</span>
+                    <span style="font-weight: 500;">:</span>
+                    <span>' . $value . '</span>
+                  </div>
+              </div>
+            ';
+            }
           }
 
 
