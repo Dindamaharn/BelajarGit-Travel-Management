@@ -8,10 +8,13 @@ $username = $_SESSION['user_name'];
 
 include '../includes/db.php'; // Koneksi database
 
+
+
 // Update status jika ada permintaan konfirmasi atau cancel
+// Gunakan isset untuk menangani tombol form GET submit
 if (isset($_GET['confirm']) && is_numeric($_GET['confirm'])) {
     $order_id = intval($_GET['confirm']);
-    $update = mysqli_query($conn, "UPDATE orders SET status = 'canceled' WHERE id = $order_id");
+    $update = mysqli_query($conn, "UPDATE orders SET status = 'confirmed' WHERE id = $order_id");  // perbaiki jadi confirmed, bukan cancelled
     if ($update) {
         header("Location: transaction.php");
         exit();
@@ -23,7 +26,7 @@ if (isset($_GET['confirm']) && is_numeric($_GET['confirm'])) {
 
 if (isset($_GET['cancel']) && is_numeric($_GET['cancel'])) {
     $order_id = intval($_GET['cancel']);
-    $update = mysqli_query($conn, "UPDATE orders SET status = 'cancel' WHERE id = $order_id");
+    $update = mysqli_query($conn, "UPDATE orders SET status = 'cancelled' WHERE id = $order_id");
     if ($update) {
         header("Location: transaction.php");
         exit();
@@ -32,6 +35,20 @@ if (isset($_GET['cancel']) && is_numeric($_GET['cancel'])) {
         exit();
     }
 }
+
+// Reset status ke pending jika ada permintaan reset
+if (isset($_GET['reset']) && is_numeric($_GET['reset'])) {
+    $order_id = intval($_GET['reset']);
+    $update = mysqli_query($conn, "UPDATE orders SET status = 'pending' WHERE id = $order_id");
+    if ($update) {
+        header("Location: transaction.php");
+        exit();
+    } else {
+        echo "Gagal update status reset: " . mysqli_error($conn);
+        exit();
+    }
+}
+
 
 // Query ambil data orders + join travel_packages
 $query = "
@@ -125,8 +142,8 @@ if (!$result) {
             <td><?= htmlspecialchars($row['metode_pembayaran']); ?></td>
             <td>
               <?php if ($row['bukti_bayar']) : ?>
-                <a href="../uploads/<?= rawurlencode($row['bukti_bayar']); ?>" target="_blank">Lihat</a><br />
-                <img src="../uploads/<?= rawurlencode($row['bukti_bayar']); ?>" alt="Bukti Bayar" style="max-width:100px; max-height:100px; margin-top:5px;" />
+                <a href="../img/bukti_bayar/<?= rawurlencode($row['bukti_bayar']); ?>" target="_blank">Lihat</a><br />
+                <img src="../img/bukti_bayar/<?= rawurlencode($row['bukti_bayar']); ?>" alt="Bukti Bayar" style="max-width:100px; max-height:100px; margin-top:5px;" />
               <?php else : ?>
                 Tidak ada
               <?php endif; ?>
@@ -136,8 +153,8 @@ if (!$result) {
                 $status = $row['status'];
                 if ($status === 'confirmed') {
                   echo '<span class="status-confirmed">Confirmed</span>';
-                } elseif ($status === 'cancel') {
-                  echo '<span class="status-cancel">Cancelled</span>';
+                } elseif ($status === 'cancelled') {
+                  echo '<span class="status-cancel">cancelled</span>';
                 } else {
                   echo '<span class="status-pending">Pending</span>';
                 }
@@ -145,13 +162,19 @@ if (!$result) {
             </td>
             <td>
               <?php 
-                if ($status === 'pending' || $status === 'waiting') : ?>
-                  <a class="action-link" href="transaction.php?confirm=<?= $row['order_id']; ?>" onclick="return confirm('Yakin konfirmasi pesanan ini?')">Konfirmasi</a> | 
-                  <a class="action-link" href="transaction.php?cancel=<?= $row['order_id']; ?>" onclick="return confirm('Yakin batalkan pesanan ini?')">Cancel</a>
-              <?php elseif ($status === 'confirmed') : ?>
-                  <span class="status-confirmed">Confirmed</span>
-              <?php else : ?>
-                  <span class="status-cancel">Cancelled</span>
+                if ($status === 'pending') : ?>
+                  <form method="GET" action="transaction.php" style="display:inline;">
+                    <button type="submit" name="confirm" value="<?= $row['order_id']; ?>" onclick="return confirm('Yakin konfirmasi pesanan ini?')">Konfirmasi</button>
+                  </form>
+                  <form method="GET" action="transaction.php" style="display:inline;">
+                    <button type="submit" name="cancel" value="<?= $row['order_id']; ?>" onclick="return confirm('Yakin batalkan pesanan ini?')">Cancel</button>
+                  </form>
+              <?php elseif ($status === 'confirmed' || $status === 'cancelled') : ?>
+                  <form method="GET" action="transaction.php" style="display:inline;">
+                    <button type="submit" name="reset" value="<?= $row['order_id']; ?>" title="Reset ke Pending" onclick="return confirm('Yakin reset status ke pending?')">×</button>
+                  </form>
+              <?php else: ?>
+                -
               <?php endif; ?>
             </td>
           </tr>
