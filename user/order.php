@@ -46,12 +46,27 @@ if (isset($_POST['submit'])) {
   $target_path = '../img/bukti_bayar/' . $file_name;
   move_uploaded_file($file['tmp_name'], $target_path);
 
-  // Simpan pesanan
-  $stmt = $conn->prepare("INSERT INTO orders (user_id, package_id, total_people, total_price, metode_pembayaran, bukti_bayar, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
-  $stmt->bind_param("iiidsss", $user_id, $package_id, $total_people, $total_price, $metode, $file_name, $status);
-  $stmt->execute();
 
-  echo "<script>alert('Pesanan berhasil dibuat. Status: pending'); window.location='cetaktiket.php';</script>";
+  function generateUniqueId($length = 8) {
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $uniqueId = '';
+    for ($i = 0; $i < $length; $i++) {
+        $uniqueId .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $uniqueId;
+}
+
+$order_unique_id = generateUniqueId();  // Generate ID unik
+
+// Simpan pesanan
+$stmt = $conn->prepare("INSERT INTO orders (user_id, package_id, total_people, total_price, metode_pembayaran, bukti_bayar, status, order_unique_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("iiidssss", $user_id, $package_id, $total_people, $total_price, $metode, $file_name, $status, $order_unique_id);
+$stmt->execute();
+
+
+  $order_id = $conn->insert_id;
+
+  echo "<script>alert('Pesanan berhasil dibuat. Status: pending'); window.location='cetaktiket.php?id=$order_id';</script>";
   exit;
 }
 ?>
