@@ -24,7 +24,7 @@
             </div>
             <div class="nav-right">
                 <a href="cekorder.php">Cek Order</a>
-                <a href="login.php">Masuk</a>
+                <a href="..auth/login.php">Masuk</a>
                 <a href="register.php" class="btn-daftar">Daftar</a>
             </div>
         </nav>

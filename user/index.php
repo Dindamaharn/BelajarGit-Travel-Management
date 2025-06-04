@@ -75,7 +75,6 @@ if (!empty($return_date)) {
 ?>
 
 
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -245,75 +244,99 @@ if (!empty($return_date)) {
 </section>
 
 <!-- Tampilkan hasil pencarian -->
-<?php if ($hasil !== null):echo";" ?>
+<?php if ($hasil !== null): ?>
 <section class="search-results container" style="padding: 20px;">
-  <h3>Hasil Pencarian:</h3>
+  <h3 style="margin-bottom: 10px; font-family: Arial, sans-serif; color: #2c3e50;">Hasil Pencarian:</h3>
   <?php if ($hasil->num_rows > 0): ?>
-    <ul>
-<?php while ($row = $hasil->fetch_assoc()): ?>
-  <li style="
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    background-color: #f9f9f9;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    list-style: none;
-  ">
-    <h4 style="margin-bottom: 8px; color: #2c3e50;">
-      <?= htmlspecialchars($row['name']) ?>
-    </h4>
-    
-    <p style="margin: 4px 0;">
-      <strong>Tanggal Berangkat:</strong>
-      <?= htmlspecialchars($row['departure_date']) ?>
-    </p>
+    <ul style="padding: 0; margin: 0;">
+      <?php while ($row = $hasil->fetch_assoc()): ?>
+      <li style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 16px 24px;
+        background-color: #fdfdfd;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        list-style: none;
+        font-family: Arial, sans-serif;
+      ">
+        <div style="flex: 1;">
+          <h4 style="
+            margin: 0 0 14px 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-decoration: underline;
+          ">
+            <?= htmlspecialchars($row['name']) ?>
+          </h4>
 
-    <?php if (!empty($row['return_date'])): ?>
-    <p style="margin: 4px 0;">
-      <strong>Tanggal Kembali:</strong>
-      <?= htmlspecialchars($row['return_date']) ?>
-    </p>
-    <?php endif; ?>
+          <?php
+          function labelValueWithIcon($label, $value, $iconSvg) {
+          return '
+          <div style="display: flex; align-items: center; margin: 6px 0; font-size: 16px; font-family: Arial, sans-serif; color: #444;">
+              <span style="margin-right: 10px;">' . $iconSvg . '</span>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <span style="min-width: 140px; display: inline-block; color: #333; font-weight: 500;">' . $label . '</span>
+              <span style="font-weight: 500;">:</span>
+            <span>' . $value . '</span>
+          </div>
+          </div>
+          ';
+          }
 
-    <p style="margin: 4px 0;">
-      <strong>Jenis Trip:</strong>
-      <?= htmlspecialchars($row['trip_type']) ?>
-    </p>
 
-    <p style="margin: 4px 0;">
-      <strong>Harga:</strong>
-      Rp<?= number_format($row['price'], 2, ',', '.') ?>
-    </p>
+          // SVG icons diperbesar
+          $iconStyle = 'width="24" height="24" fill="#3498db" style="vertical-align: middle;"';
+          $iconCalendar = '<svg xmlns="http://www.w3.org/2000/svg" '.$iconStyle.' viewBox="0 0 24 24"><path d="M7 11h5v5H7zm7-6h3a2 2 0 0 1 2 2v3H3V7a2 2 0 0 1 2-2h3V2h2v3h4V2h2v3zM3 10h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V10z"/></svg>';
+          $iconReturnCalendar = '<svg xmlns="http://www.w3.org/2000/svg" '.$iconStyle.' viewBox="0 0 24 24"><path d="M12 8v4l3 3 1.5-1.5-2-2V8z"/><path d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/></svg>';
+          $iconTrip = '<svg xmlns="http://www.w3.org/2000/svg" '.$iconStyle.' viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11L12 2zm0 14a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>';
+          $iconPrice = '<svg xmlns="http://www.w3.org/2000/svg" '.$iconStyle.' viewBox="0 0 24 24"><path d="M21 12.3L12.3 3.6a1.25 1.25 0 0 0-.9-.4H4a1 1 0 0 0-1 1v7.4c0 .3.1.6.4.9l8.7 8.7c.5.5 1.3.5 1.8 0l7.1-7.1c.5-.5.5-1.3 0-1.8zM6.5 7.5A1.5 1.5 0 1 1 9 6a1.5 1.5 0 0 1-2.5 1.5z"/></svg>';
+          $iconSeat = '<svg xmlns="http://www.w3.org/2000/svg" '.$iconStyle.' viewBox="0 0 24 24"><path d="M4 12h16v6H4zM5 18v2h14v-2H5z"/></svg>';
+          ?>
 
-    <p style="margin: 4px 0;">
-      <strong>Kursi Tersedia:</strong>
-      <?= htmlspecialchars($row['available_seats']) ?>
-    </p>
+          <?= labelValueWithIcon('Tanggal Berangkat', htmlspecialchars($row['departure_date']), $iconCalendar) ?>
+          <?php if (!empty($row['return_date'])): ?>
+            <?= labelValueWithIcon('Tanggal Kembali', htmlspecialchars($row['return_date']), $iconReturnCalendar) ?>
+          <?php endif; ?>
+          <?= labelValueWithIcon('Jenis Trip', htmlspecialchars($row['trip_type']), $iconTrip) ?>
+          <?= labelValueWithIcon('Harga', 'Rp' . number_format($row['price'], 2, ',', '.'), $iconPrice) ?>
+          <?= labelValueWithIcon('Kursi Tersedia', htmlspecialchars($row['available_seats']), $iconSeat) ?>
+        </div>
 
-    <a href="order.php?id=<?= urlencode($row['id']) ?>" class="btn-pesan"
-       style="
-         display: inline-block;
-         margin-top: 10px;
-         padding: 8px 14px;
-         background-color: #3498db;
-         color: white;
-         text-decoration: none;
-         border-radius: 5px;
-         transition: background-color 0.2s;
-       "
-       onmouseover="this.style.backgroundColor='#2980b9';"
-       onmouseout="this.style.backgroundColor='#3498db';"
-    >Pesan</a>
-  </li>
-<?php endwhile; ?>
-
+        <div style="display: flex; align-items: center;">
+          <a href="order.php?id=<?= urlencode($row['id']) ?>"
+             style="
+               padding: 12px 20px;
+               background-color: #3498db;
+               color: white;
+               text-decoration: none;
+               border-radius: 6px;
+               font-weight: 700;
+               font-family: Arial, sans-serif;
+               box-shadow: 0 4px 8px rgba(52,152,219,0.3);
+               transition: background-color 0.25s ease, box-shadow 0.25s ease;
+               text-align: center;
+             "
+             onmouseover="this.style.backgroundColor='#2980b9'; this.style.boxShadow='0 6px 12px rgba(41,128,185,0.4)';"
+             onmouseout="this.style.backgroundColor='#3498db'; this.style.boxShadow='0 4px 8px rgba(52,152,219,0.3)';"
+          >Pesan</a>
+        </div>
+      </li>
+      <?php endwhile; ?>
     </ul>
   <?php else: ?>
-    <p>Maaf, tidak ada paket perjalanan yang cocok ditemukan.</p>
+    <p style="color: #d10d0d; font-weight: 700; font-family: Arial, sans-serif; font-size: 18px;">
+      Maaf, tidak ada paket perjalanan yang cocok ditemukan.
+    </p>
   <?php endif; ?>
 </section>
 <?php endif; ?>
+
 
 <!-- Info section -->
 <section class="info-section">

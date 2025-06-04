@@ -1,0 +1,90 @@
+/* Reset dasar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  padding: 40px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* agar container tepat di tengah vertikal */
+  min-height: 100vh; /* supaya body selalu memenuhi layar */
+}
+
+/* Wrapper 2 kolom */
+.container {
+  display: flex;
+  flex-wrap: nowrap; /* jangan wrap supaya 2 kolom selalu berdampingan */
+  gap: 0; /* hilangkan jarak antar card */
+  max-width: 1000px;
+  width: 100%;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.detail-paket {
+  flex: 1;
+  min-width: 300px;
+  background-color: #e0f0ff;
+  padding: 25px 25px 60px 25px; /* Tambah ruang bawah untuk icon bis */
+  border-radius: 0;
+  box-shadow: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.detail-paket h2 {
+  margin-bottom: 10px;
+  color: #0b5394;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.detail-paket .nama-paket {
+  text-align: center;
+  font-weight: normal;
+  font-size: 18px;
+  margin-bottom: 25px; /* jarak cukup ke info berikutnya */
+}
+
+/* Jarak antar informasi */
+.detail-paket p {
+  margin-bottom: 18px;
+  font-size: 16px;
+  color: #003366;
+}
+
+.detail-paket p i {
+  font-size: 18px;
+  margin-right: 6px;
+  color: #0b5394;
+}
+
+/* Icon bis di pojok kanan bawah */
+.detail-paket::after {
+  content: "\f207"; /* Font Awesome bus icon */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 100px; /* Perbesar */
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  color: rgba(11, 83, 148, 0.07); /* Lebih soft agar tidak mengganggu */
+  pointer-events: none;
+}
+
+
+/* Responsif */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .detail-paket, .form-container {
+    border-right: none;
+  }
+}

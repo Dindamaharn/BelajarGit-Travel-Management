@@ -51,7 +51,7 @@ if (isset($_POST['submit'])) {
   $stmt->bind_param("iiidsss", $user_id, $package_id, $total_people, $total_price, $metode, $file_name, $status);
   $stmt->execute();
 
-  echo "<script>alert('Pesanan berhasil dibuat. Status: pending'); window.location='cekorder.php';</script>";
+  echo "<script>alert('Pesanan berhasil dibuat. Status: pending'); window.location='cetaktiket.php';</script>";
   exit;
 }
 ?>
@@ -60,70 +60,81 @@ if (isset($_POST['submit'])) {
 <html>
 <head>
   <title>Order Paket</title>
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    .form-container { max-width: 500px; }
-    label { margin-top: 10px; display: block; }
-    input, select { width: 100%; padding: 6px; margin-top: 5px; }
-    .btn-pesan {
-      padding: 10px 20px;
-      background-color: #dd5c36;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      margin-top: 15px;
-      cursor: pointer;
-    }
-    .btn-pesan:hover { background-color: #b34727; }
-  </style>
+  <link rel="stylesheet" href="../css/user/order.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
+
 <body>
 
-<h2>Detail Paket</h2>
-<p><strong><?= htmlspecialchars($paket['name']) ?></strong></p>
-<p>Tanggal: <?= htmlspecialchars($paket['departure_date']) ?></p>
-<p>Jenis Trip: <?= htmlspecialchars($paket['trip_type']) ?></p>
-<p>Harga per Orang: Rp<?= number_format($paket['price'], 0, ',', '.') ?></p>
+<div class="container">
+  <!-- Kartu detail paket -->
+<div class="detail-paket">
+  <h2>Detail Paket</h2>
+  <p class="nama-paket"><?= htmlspecialchars($paket['name']) ?></p>
 
-<hr>
+  <p> <i class="fa-solid fa-suitcase-rolling"></i>
+    <strong>Jenis trip:</strong>
+    Sekali jalan / Pulang Pergi
+  </p>
 
-<div class="form-container">
-  <h3>Form Pemesanan</h3>
-  <form method="POST" enctype="multipart/form-data">
-    <label>Jumlah Kursi:</label>
-    <input type="number" name="jumlah_kursi" id="jumlah_kursi" min="1" max="<?= $paket['available_seats'] ?>" value="1" required>
+  <p><i class="fa-solid fa-calendar-days"></i>
+  <strong>Tanggal keberangkatan:</strong>
+    02-07-2025
+  </p>
 
-    <label>Total Harga:</label>
-    <input type="text" id="total_harga" readonly>
+  <p> <i class="fa-solid fa-suitcase-rolling"></i>
+    <strong>Tanggal Kembali:</strong>
+    Sekali jalan / Pulang Pergi
+  </p>
 
-    <label>Metode Pembayaran:</label>
-    <select name="metode_pembayaran" required>
-      <option value="">-- Pilih --</option>
-      <option value="OVO">OVO</option>
-      <option value="DANA">DANA</option>
-      <option value="Shopeepay">Shopeepay</option>
-      <option value="BCA">BCA</option>
-      <option value="Indomaret">Indomaret</option>
-      <option value="Alfamart">Alfamart</option>
-    </select>
 
-    <label>Upload Bukti Pembayaran:</label>
-    <input type="file" name="bukti_bayar" accept="image/*" required>
+  <p> <i class="fa-solid fa-location-dot"></i>
+    <strong>Lokasi Keberangkatan:</strong>
+    wiyungs
+  </p>
 
-    <button type="submit" name="submit" class="btn-pesan">Pesan Sekarang</button>
-  </form>
+  <p> <i class="fa-solid fa-map-marker-alt"></i>
+    <strong>Lokasi Tujuan:</strong>
+    Bandungs
+  </p>
 
-  <a href="index.php" style="display: inline-block; margin-top: 15px; text-decoration: none;">
-  <button type="button" style="
-    padding: 10px 20px;
-    background-color: #888;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  ">← Kembali ke Beranda</button>
-</a>
+  <p> <i class="fa-solid fa-money-bill-wave"></i>
+    <strong>Harga per orang:</strong>
+    Rp. 2 jeti
+  </p>
+</div>
 
+
+  <!-- Formulir pemesanan -->
+  <div class="form-container">
+    <h3>Form Pemesanan</h3>
+    <form method="POST" enctype="multipart/form-data">
+      <label>Jumlah Kursi:</label>
+      <input type="number" name="jumlah_kursi" id="jumlah_kursi" min="1" max="<?= $paket['available_seats'] ?>" value="1" required>
+
+      <label>Total Harga:</label>
+      <input type="text" id="total_harga" readonly>
+
+      <label>Metode Pembayaran:</label>
+      <select name="metode_pembayaran" required>
+        <option value="">-- Pilih --</option>
+        <option value="OVO">OVO</option>
+        <option value="DANA">DANA</option>
+        <option value="Shopeepay">Shopeepay</option>
+        <option value="BCA">BCA</option>
+        <option value="Indomaret">Indomaret</option>
+        <option value="Alfamart">Alfamart</option>
+      </select>
+
+      <label>Upload Bukti Pembayaran:</label>
+      <input type="file" name="bukti_bayar" accept="image/*" required>
+
+      <div class="button-group">
+      <button type="submit" name="submit" class="btn-pesan">Pesan Sekarang</button>
+      <a href="index.php"><button type="button" class="btn-kembali">Kembali</button></a>
+</div>
+
+  </div>
 </div>
 
 <script>
@@ -138,7 +149,24 @@ if (isset($_POST['submit'])) {
 
   inputJumlah.addEventListener('input', updateHarga);
   updateHarga();
+  
+
+   document.querySelector('.plus-btn').addEventListener('click', () => {
+    const input = document.getElementById('jumlah_kursi');
+    if (parseInt(input.value) < parseInt(input.max)) {
+      input.value = parseInt(input.value) + 1;
+    }
+  });
+
+  document.querySelector('.minus-btn').addEventListener('click', () => {
+    const input = document.getElementById('jumlah_kursi');
+    if (parseInt(input.value) > parseInt(input.min)) {
+      input.value = parseInt(input.value) - 1;
+    }
+  });
 </script>
+
+
 
 </body>
 </html>

@@ -1,0 +1,90 @@
+ body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f8f8;
+      padding: 30px;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #0b5394;
+      color: white;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #083b70;
+    }
+    
+    .tiket-container {
+      max-width: 700px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px;
+      border: 2px dashed #0b5394;
+      border-radius: 10px;
+      position: relative;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+
+    .tiket-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .tiket-header h2 {
+      color: #0b5394;
+      margin-bottom: 5px;
+    }
+
+    .tiket-header p {
+      color: #555;
+    }
+
+    .tiket-info {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    .tiket-info strong {
+      display: inline-block;
+      width: 160px;
+      color: #0b5394;
+    }
+
+    .kode-unik {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #0b5394;
+      background-color: #e3efff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+
+     .warning {
+      margin-top: 25px;
+      text-align: center;
+      font-weight: bold;
+      color: #d10d0d;
+      background-color: #ffecec;
+      padding: 12px;
+      border: 1px solid #ffcccc;
+      border-radius: 6px;
+    }
+
+    @media print {
+      .print-button {
+        display: none;
+      }
+    }
