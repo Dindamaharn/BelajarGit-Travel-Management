@@ -52,39 +52,31 @@ if ($search !== '') {
 
    $likeSearch = '%' . $search . '%'; // <<< Tambahkan ini sebelum bind_param
 
-    $countStmt = $conn->prepare("SELECT COUNT(*) as total FROM travel_packages WHERE 
-    name LIKE ? OR 
-    trip_type LIKE ? OR 
-    departure_location LIKE ? OR 
-    destination LIKE ? OR 
-    departure_date LIKE ? OR 
-    return_date LIKE ? OR 
-    price LIKE ? OR 
-    available_seats LIKE ?");
-    $countStmt->bind_param("ssssssss", $likeSearch, $likeSearch, $likeSearch, $likeSearch, $likeSearch, $likeSearch, $likeSearch, $likeSearch);
-    $countStmt = $conn->prepare("SELECT COUNT(*) as total FROM travel_packages WHERE name LIKE ?");
     $likeSearch = '%' . $search . '%';
-    $countStmt->bind_param("s", $likeSearch);
-    $countStmt->execute();
-    $countResult = $countStmt->get_result();
-    $totalRows = $countResult->fetch_assoc()['total'];
-    $countStmt->close();
+    $countStmt = $conn->prepare("SELECT COUNT(*) as total FROM travel_packages WHERE 
+        name LIKE ? OR 
+        trip_type LIKE ? OR 
+        departure_location LIKE ? OR 
+        destination LIKE ?");
+    $countStmt->bind_param("ssss", $likeSearch, $likeSearch, $likeSearch, $likeSearch);
+
+
+        $countStmt->execute();
+        $countResult = $countStmt->get_result();
+        $totalRows = $countResult->fetch_assoc()['total'];
+        $countStmt->close();
 
     // Ambil data dengan paginasi
 
     $stmt = $conn->prepare("SELECT * FROM travel_packages WHERE 
-    name LIKE ? OR 
-    trip_type LIKE ? OR 
-    departure_location LIKE ? OR 
-    destination LIKE ? OR 
-    departure_date LIKE ? OR 
-    return_date LIKE ? OR 
-    price LIKE ? OR 
-    available_seats LIKE ?
-    ORDER BY id ASC LIMIT ? OFFSET ?");
-    $stmt->bind_param("sssssssiii", $likeSearch, $likeSearch, $likeSearch, $likeSearch, $likeSearch, $likeSearch, $likeSearch, $likeSearch, $limit, $offset);
-    $stmt = $conn->prepare("SELECT * FROM travel_packages WHERE name LIKE ? ORDER BY id ASC LIMIT ? OFFSET ?");
-    $stmt->bind_param("sii", $likeSearch, $limit, $offset);
+        name LIKE ? OR 
+        trip_type LIKE ? OR 
+        departure_location LIKE ? OR 
+        destination LIKE ?
+        ORDER BY id ASC LIMIT ? OFFSET ?");
+    $stmt->bind_param("ssssii", $likeSearch, $likeSearch, $likeSearch, $likeSearch, $limit, $offset);
+
+
     $stmt->execute();
     $result = $stmt->get_result();
 } else {

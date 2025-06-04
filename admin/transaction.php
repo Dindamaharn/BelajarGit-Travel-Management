@@ -8,15 +8,30 @@ $username = $_SESSION['user_name'];
 
 include '../includes/db.php'; // Koneksi database
 
+$search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+
+$whereClause = '';
+if ($search !== '') {
+    $whereClause = "WHERE 
+        users.name LIKE '%$search%' OR 
+        travel_packages.name LIKE '%$search%' OR 
+        orders.metode_pembayaran LIKE '%$search%' OR
+        orders.status LIKE '%$search%'
+        ";
+        
+}
+
 
 $limit = 7; // jumlah data per halaman
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
 $offset = ($page - 1) * $limit;
 
-// Hitung total data
+// Hitung total data dengan pencarian
 $total_result = mysqli_query($conn, "
     SELECT COUNT(*) AS total FROM orders 
     JOIN travel_packages ON orders.package_id = travel_packages.id
+    JOIN users ON orders.user_id = users.id
+    $whereClause
 ");
 $total_row = mysqli_fetch_assoc($total_result);
 $total_data = $total_row['total'];
@@ -63,7 +78,7 @@ if (isset($_GET['reset']) && is_numeric($_GET['reset'])) {
 }
 
 
-// Query ambil data orders + join travel_packages
+// Query data dengan pencarian
 $query = "
 SELECT 
     orders.id AS order_id,
@@ -78,6 +93,7 @@ SELECT
 FROM orders
 JOIN travel_packages ON orders.package_id = travel_packages.id
 JOIN users ON orders.user_id = users.id
+$whereClause
 ORDER BY orders.id DESC
 LIMIT $limit OFFSET $offset
 ";
