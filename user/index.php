@@ -62,7 +62,9 @@ if (!empty($return_date)) {
                       WHERE departure_location = ? 
                       AND destination = ? 
                       AND departure_date = ? 
-                      AND available_seats > 0";
+                      AND available_seats > 0
+                      AND return_date = NULL
+                      ";
 
             $stmt = $conn->prepare($query);
             $stmt->bind_param("sss", $asal, $tujuan, $departure_date);
