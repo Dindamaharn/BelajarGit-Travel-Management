@@ -1,11 +1,23 @@
 <?php
-session_start();
+require_once '../includes/session.php'; // atau path relatifnya
 require '../includes/db.php';
+
 
 if (!isset($_SESSION['user_id'])) {
   echo "<script>alert('Silakan login terlebih dahulu.'); window.location='../auth/login.php';</script>";
   exit;
 }
+
+// Ambil user_id dari session
+$user_id = $_SESSION['user_id'];
+
+// Cek apakah user_id benar-benar ada di tabel users
+$cekUser = $conn->query("SELECT id FROM users WHERE id = $user_id");
+if ($cekUser->num_rows === 0) {
+    echo "<script>alert('User tidak valid. Silakan login sebagai pengguna.'); window.location='../auth/login.php';</script>";
+    exit;
+}
+
 
 if (!isset($_GET['id'])) {
   echo "ID paket tidak ditemukan.";
@@ -31,7 +43,7 @@ if (isset($_POST['submit'])) {
   // Upload bukti
   $file = $_FILES['bukti_bayar'];
   $file_name = time() . '_' . basename($file['name']);
-  $target_path = 'uploads/' . $file_name;
+  $target_path = '../img/bukti_bayar/' . $file_name;
   move_uploaded_file($file['tmp_name'], $target_path);
 
   // Simpan pesanan

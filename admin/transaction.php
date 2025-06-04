@@ -8,10 +8,27 @@ $username = $_SESSION['user_name'];
 
 include '../includes/db.php'; // Koneksi database
 
+
+// PAGINATION CONFIG
+$limit = 7; // jumlah data per halaman
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
+$offset = ($page - 1) * $limit;
+
+// Hitung total data
+$total_result = mysqli_query($conn, "
+    SELECT COUNT(*) AS total FROM orders 
+    JOIN travel_packages ON orders.package_id = travel_packages.id
+");
+$total_row = mysqli_fetch_assoc($total_result);
+$total_data = $total_row['total'];
+$total_pages = ceil($total_data / $limit);
+
+
 // Update status jika ada permintaan konfirmasi atau cancel
+// Gunakan isset untuk menangani tombol form GET submit
 if (isset($_GET['confirm']) && is_numeric($_GET['confirm'])) {
     $order_id = intval($_GET['confirm']);
-    $update = mysqli_query($conn, "UPDATE orders SET status = 'canceled' WHERE id = $order_id");
+    $update = mysqli_query($conn, "UPDATE orders SET status = 'confirmed' WHERE id = $order_id");  // perbaiki jadi confirmed, bukan cancelled
     if ($update) {
         header("Location: transaction.php");
         exit();
@@ -23,7 +40,7 @@ if (isset($_GET['confirm']) && is_numeric($_GET['confirm'])) {
 
 if (isset($_GET['cancel']) && is_numeric($_GET['cancel'])) {
     $order_id = intval($_GET['cancel']);
-    $update = mysqli_query($conn, "UPDATE orders SET status = 'cancel' WHERE id = $order_id");
+    $update = mysqli_query($conn, "UPDATE orders SET status = 'cancelled' WHERE id = $order_id");
     if ($update) {
         header("Location: transaction.php");
         exit();
@@ -32,6 +49,20 @@ if (isset($_GET['cancel']) && is_numeric($_GET['cancel'])) {
         exit();
     }
 }
+
+// Reset status ke pending jika ada permintaan reset
+if (isset($_GET['reset']) && is_numeric($_GET['reset'])) {
+    $order_id = intval($_GET['reset']);
+    $update = mysqli_query($conn, "UPDATE orders SET status = 'pending' WHERE id = $order_id");
+    if ($update) {
+        header("Location: transaction.php");
+        exit();
+    } else {
+        echo "Gagal update status reset: " . mysqli_error($conn);
+        exit();
+    }
+}
+
 
 // Query ambil data orders + join travel_packages
 $query = "
@@ -48,11 +79,13 @@ SELECT
 FROM orders
 JOIN travel_packages ON orders.package_id = travel_packages.id
 ORDER BY orders.id DESC
+LIMIT $limit OFFSET $offset
 ";
 $result = mysqli_query($conn, $query);
 if (!$result) {
     die("Query error: " . mysqli_error($conn));
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +96,22 @@ if (!$result) {
   <link rel="stylesheet" href="../css/admin/transaction.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    
+    .page-link {
+      margin: 0 5px;
+      padding: 6px 12px;
+      background-color: #f1f1f1;
+      color: #333;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    .page-link:hover {
+      background-color: #ddd;
+    }
+    .page-link.active {
+      background-color: #007BFF;
+      color: white;
+      font-weight: bold;
+    } 
   </style>
 </head>
 <body>
@@ -125,8 +173,8 @@ if (!$result) {
             <td><?= htmlspecialchars($row['metode_pembayaran']); ?></td>
             <td>
               <?php if ($row['bukti_bayar']) : ?>
-                <a href="../uploads/<?= rawurlencode($row['bukti_bayar']); ?>" target="_blank">Lihat</a><br />
-                <img src="../uploads/<?= rawurlencode($row['bukti_bayar']); ?>" alt="Bukti Bayar" style="max-width:100px; max-height:100px; margin-top:5px;" />
+                <a href="../img/bukti_bayar/<?= rawurlencode($row['bukti_bayar']); ?>" target="_blank">Lihat</a><br />
+                <img src="../img/bukti_bayar/<?= rawurlencode($row['bukti_bayar']); ?>" alt="Bukti Bayar" style="max-width:100px; max-height:100px; margin-top:5px;" />
               <?php else : ?>
                 Tidak ada
               <?php endif; ?>
@@ -136,8 +184,8 @@ if (!$result) {
                 $status = $row['status'];
                 if ($status === 'confirmed') {
                   echo '<span class="status-confirmed">Confirmed</span>';
-                } elseif ($status === 'cancel') {
-                  echo '<span class="status-cancel">Cancelled</span>';
+                } elseif ($status === 'cancelled') {
+                  echo '<span class="status-cancel">cancelled</span>';
                 } else {
                   echo '<span class="status-pending">Pending</span>';
                 }
@@ -145,19 +193,43 @@ if (!$result) {
             </td>
             <td>
               <?php 
-                if ($status === 'pending' || $status === 'waiting') : ?>
-                  <a class="action-link" href="transaction.php?confirm=<?= $row['order_id']; ?>" onclick="return confirm('Yakin konfirmasi pesanan ini?')">Konfirmasi</a> | 
-                  <a class="action-link" href="transaction.php?cancel=<?= $row['order_id']; ?>" onclick="return confirm('Yakin batalkan pesanan ini?')">Cancel</a>
-              <?php elseif ($status === 'confirmed') : ?>
-                  <span class="status-confirmed">Confirmed</span>
-              <?php else : ?>
-                  <span class="status-cancel">Cancelled</span>
+                if ($status === 'pending') : ?>
+                  <form method="GET" action="transaction.php" style="display:inline;">
+                    <button type="submit" name="confirm" value="<?= $row['order_id']; ?>" onclick="return confirm('Yakin konfirmasi pesanan ini?')">Konfirmasi</button>
+                  </form>
+                  <form method="GET" action="transaction.php" style="display:inline;">
+                    <button type="submit" name="cancel" value="<?= $row['order_id']; ?>" onclick="return confirm('Yakin batalkan pesanan ini?')">Cancel</button>
+                  </form>
+              <?php elseif ($status === 'confirmed' || $status === 'cancelled') : ?>
+                  <form method="GET" action="transaction.php" style="display:inline;">
+                    <button type="submit" name="reset" value="<?= $row['order_id']; ?>" title="Reset ke Pending" onclick="return confirm('Yakin reset status ke pending?')">×</button>
+                  </form>
+              <?php else: ?>
+                -
               <?php endif; ?>
             </td>
           </tr>
         <?php endwhile; ?>
         </tbody>
       </table>
+
+      <!-- Pagination -->
+      <div class="pagination" style="margin-top: 20px;">
+        <?php if ($page > 1): ?>
+          <a href="?page=<?= $page - 1; ?>" class="page-link">&laquo; Prev</a>
+        <?php endif; ?>
+
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+          <a href="?page=<?= $i; ?>" class="page-link <?= $i == $page ? 'active' : '' ?>">
+            <?= $i; ?>
+          </a>
+        <?php endfor; ?>
+
+        <?php if ($page < $total_pages): ?>
+          <a href="?page=<?= $page + 1; ?>" class="page-link">Next &raquo;</a>
+        <?php endif; ?>
+      </div>
+
 
     </div>
   </div>
