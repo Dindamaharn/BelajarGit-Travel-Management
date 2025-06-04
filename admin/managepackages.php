@@ -41,18 +41,37 @@ $username = $_SESSION['user_name'];
 // Tangkap parameter search jika ada
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
+// Konfigurasi paginasi
+$limit = 7; // 7 data per halaman
+$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$offset = ($page - 1) * $limit;
+
+
 // Siapkan query dengan search jika ada
 if ($search !== '') {
-    // Prepared statement untuk pencarian nama paket dengan LIKE
-    $stmt = $conn->prepare("SELECT * FROM travel_packages WHERE name LIKE ? ORDER BY id ASC");
+    $countStmt = $conn->prepare("SELECT COUNT(*) as total FROM travel_packages WHERE name LIKE ?");
     $likeSearch = '%' . $search . '%';
-    $stmt->bind_param("s", $likeSearch);
+    $countStmt->bind_param("s", $likeSearch);
+    $countStmt->execute();
+    $countResult = $countStmt->get_result();
+    $totalRows = $countResult->fetch_assoc()['total'];
+    $countStmt->close();
+
+    // Ambil data dengan paginasi
+    $stmt = $conn->prepare("SELECT * FROM travel_packages WHERE name LIKE ? ORDER BY id ASC LIMIT ? OFFSET ?");
+    $stmt->bind_param("sii", $likeSearch, $limit, $offset);
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    $query = "SELECT * FROM travel_packages ORDER BY id ASC";
+    $countResult = $conn->query("SELECT COUNT(*) as total FROM travel_packages");
+    $totalRows = $countResult->fetch_assoc()['total'];
+
+    $query = "SELECT * FROM travel_packages ORDER BY id ASC LIMIT $limit OFFSET $offset";
     $result = $conn->query($query);
 }
+
+// Hitung total halaman
+$totalPages = ceil($totalRows / $limit); 
 ?>
 
 <!DOCTYPE html>
@@ -62,6 +81,24 @@ if ($search !== '') {
   <title>Manage Packages</title>
   <link rel="stylesheet" href="../css/admin/managepackages.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    .pagination-link {
+      display: inline-block;
+      padding: 8px 12px;
+      margin: 2px;
+      background-color: #f0f0f0;
+      color: #000;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .pagination-link.active {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+
 </head>
 <body>
 <div class="btn-add-package-wrapper" style="position: relative;">
@@ -162,6 +199,27 @@ if ($search !== '') {
           ?>
         </tbody>
       </table>
+
+      <?php if ($totalPages > 1): ?>
+        <div class="pagination" style="margin-top: 20px; text-align:center;">
+          <?php if ($page > 1): ?>
+            <a href="?<?php echo http_build_query(['page' => $page - 1, 'search' => $search]); ?>" class="pagination-link">&laquo; Prev</a>
+          <?php endif; ?>
+
+          <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+            <a href="?<?php echo http_build_query(['page' => $i, 'search' => $search]); ?>"
+              class="pagination-link <?php echo $i === $page ? 'active' : ''; ?>"
+              style="margin: 0 5px;">
+              <?php echo $i; ?>
+            </a>
+          <?php endfor; ?>
+
+          <?php if ($page < $totalPages): ?>
+            <a href="?<?php echo http_build_query(['page' => $page + 1, 'search' => $search]); ?>" class="pagination-link">Next &raquo;</a>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+
     </div>
   </div>
 </div>
