@@ -63,7 +63,7 @@ if (!empty($return_date)) {
                       AND destination = ? 
                       AND departure_date = ? 
                       AND available_seats > 0
-                      AND return_date = NULL
+                      AND trip_type = 'sekali_jalan'
                       ";
 
             $stmt = $conn->prepare($query);
