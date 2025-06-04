@@ -9,7 +9,6 @@ $username = $_SESSION['user_name'];
 include '../includes/db.php'; // Koneksi database
 
 
-// PAGINATION CONFIG
 $limit = 7; // jumlah data per halaman
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
 $offset = ($page - 1) * $limit;

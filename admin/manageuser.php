@@ -108,6 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
                 LIMIT ? OFFSET ?");
               $like = "%" . $search . "%";
               $stmt->bind_param("ssssii", $like, $like, $like, $like, $limit, $offset);
+              $stmt = $conn->prepare("SELECT id, name, email, phone FROM users WHERE name LIKE ? OR email LIKE ? OR phone LIKE ?  LIMIT ? OFFSET ?");
+              $like = "%" . $search . "%";
+              $stmt->bind_param("sssii", $like, $like, $like, $limit, $offset);
               $stmt->execute();
               $result = $stmt->get_result();
               $stmt->close();
@@ -119,6 +122,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
                   email LIKE ? OR 
                   phone LIKE ?");
               $countStmt->bind_param("ssss", $like, $like, $like, $like);
+              $countStmt = $conn->prepare("SELECT COUNT(*) as total FROM users WHERE name LIKE ? OR email LIKE ? OR phone LIKE ?");
+              $countStmt->bind_param("sss", $like, $like, $like);
               $countStmt->execute();
               $countResult = $countStmt->get_result();
               $totalData = $countResult->fetch_assoc()['total'];
