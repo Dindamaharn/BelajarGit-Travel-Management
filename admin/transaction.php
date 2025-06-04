@@ -67,7 +67,7 @@ if (isset($_GET['reset']) && is_numeric($_GET['reset'])) {
 $query = "
 SELECT 
     orders.id AS order_id,
-    orders.user_id,
+    users.name AS user_name,
     travel_packages.name AS package_name,
     travel_packages.price AS seat_price,
     orders.total_people,
@@ -77,6 +77,7 @@ SELECT
     orders.status
 FROM orders
 JOIN travel_packages ON orders.package_id = travel_packages.id
+JOIN users ON orders.user_id = users.id
 ORDER BY orders.id DESC
 LIMIT $limit OFFSET $offset
 ";
@@ -149,7 +150,7 @@ if (!$result) {
         <thead>
           <tr>
             <th>ID Pesanan</th>
-            <th>ID User</th>
+            <th>Nama User</th>
             <th>Nama Paket</th>
             <th>Harga Kursi</th>
             <th>Total Orang</th>
@@ -164,7 +165,7 @@ if (!$result) {
         <?php while ($row = mysqli_fetch_assoc($result)) : ?>
           <tr>
             <td><?= $row['order_id']; ?></td>
-            <td><?= $row['user_id']; ?></td>
+            <td><?= $row['user_name']; ?></td>
             <td><?= htmlspecialchars($row['package_name']); ?></td>
             <td>Rp<?= number_format($row['seat_price'], 0, ',', '.'); ?></td>
             <td><?= $row['total_people']; ?></td>
