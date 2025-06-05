@@ -102,7 +102,8 @@ if (!empty($return_date)) {
     </div>
     <nav class="navbar">
       <div class="nav-left">
-        <a href="#">Beranda</a>
+        <a href="index.php">Beranda</a>
+        <a href="packages.php">Paket</a>
         <a href="bantuan.php">Bantuan</a>
         <a href="carabayar.php">Cara Bayar</a>
       </div>
@@ -115,7 +116,7 @@ if (!empty($return_date)) {
             <?= !empty($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'User' ?> <i class="fa fa-caret-down"></i>
           </button>
           <div class="dropdown-content">
-            <a href="../auth/logout.php">Logout</a>
+            <a href="../auth/logout.php">Keluar</a>
           </div>
         </div>
         <?php else: ?>

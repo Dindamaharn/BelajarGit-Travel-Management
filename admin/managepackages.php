@@ -120,7 +120,7 @@ $totalPages = ceil($totalRows / $limit);
 <body>
 <div class="btn-add-package-wrapper" style="position: relative;">
   <a href="addpackage.php" class="btn-add-package" style="position: absolute; top: 20px; right: 20px;">
-    + Add Package
+    + Tambah Paket
   </a>
 </div>
 
@@ -132,17 +132,17 @@ $totalPages = ceil($totalRows / $limit);
     <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
   </div>
   <ul>
-    <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
-    <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
-    <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Manage Packages</span></a></li>
-    <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaction</span></a></li>
-    <li class="logout-item"><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+<li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dasbor</span></a></li>
+    <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Kelola Pengguna</span></a></li>
+    <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Kelola Paket</span></a></li>
+    <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li>
+    <li class="logout-item"><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></a></li>
   </ul>
 </div>
 
   <div class="main">
     <div class="content">
-      <h2>Manage Packages</h2>
+      <h2>Kelola Paket</h2>
 
       <div class="search-container">
         <form method="GET" action="" style="display:flex; gap: 10px; align-items: center;">
@@ -236,7 +236,7 @@ $totalPages = ceil($totalRows / $limit);
           <?php endfor; ?>
 
           <?php if ($page < $totalPages): ?>
-            <a href="?<?php echo http_build_query(['page' => $page + 1, 'search' => $search]); ?>" class="pagination-link">Next &raquo;</a>
+            <a href="?<?php echo http_build_query(['page' => $page + 1, 'search' => $search]); ?>" class="pagination-link">Selanjutnya &raquo;</a>
           <?php endif; ?>
         </div>
       <?php endif; ?>

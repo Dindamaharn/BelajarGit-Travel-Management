@@ -142,11 +142,11 @@ if (!$result) {
     <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
   </div>
   <ul>
-    <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
-    <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Manage Users</span></a></li>
-    <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Manage Packages</span></a></li>
-    <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaction</span></a></li>
-    <li class="logout-item"><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+    <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dasbor</span></a></li>
+    <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Kelola Pengguna</span></a></li>
+    <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Kelola Paket</span></a></li>
+    <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li>
+    <li class="logout-item"><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></a></li>
   </ul>
 </div>
 

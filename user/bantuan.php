@@ -16,12 +16,13 @@
             <img src="../img/logowarna.jpg" alt="Logo Kiran">
             <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
         </div>
-        <nav class="navbar">
-            <div class="nav-left">
-                <a href="index.php">Beranda</a>
-                <a href="bantuan.php">Bantuan</a>
-                <a href="carabayar.php">Cara Bayar</a>
-            </div>
+     <nav class="navbar">
+      <div class="nav-left">
+        <a href="index.php">Beranda</a>
+        <a href="packages.php">Paket</a>
+        <a href="bantuan.php">Bantuan</a>
+        <a href="carabayar.php">Cara Bayar</a>
+      </div>
             <div class="nav-right">
                 <a href="cekorder.php">Cek Order</a>
                 <a href="..auth/login.php">Masuk</a>

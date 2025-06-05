@@ -42,9 +42,13 @@ html {
 }
 
 .navbar {
+    flex-grow: 1;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    margin-left: 40px;
+    /* Jarak antara logo dan menu */
+    padding: 35px;
 }
 
 .nav-left a,
@@ -55,10 +59,6 @@ html {
     color: rgb(0, 0, 0);
 }
 
-.nav-right {
-    margin-left: 300px;
-    /* Ini yang mendorong ke kanan */
-}
 
 .btn-daftar {
     background-color: #f8a500;

@@ -89,33 +89,33 @@ $stmt->execute();
 
   <p> <i class="fa-solid fa-suitcase-rolling"></i>
     <strong>Jenis trip:</strong>
-    Sekali jalan / Pulang Pergi
+   <?php echo htmlspecialchars($paket['trip_type']); ?>
   </p>
 
   <p><i class="fa-solid fa-calendar-days"></i>
   <strong>Tanggal keberangkatan:</strong>
-    02-07-2025
+   <?php echo date('d-m-Y', strtotime($paket['departure_date'])); ?>
   </p>
 
   <p> <i class="fa-solid fa-suitcase-rolling"></i>
     <strong>Tanggal Kembali:</strong>
-    Sekali jalan / Pulang Pergi
+  <?php echo $paket['return_date'] ? date('d-m-Y', strtotime($paket['return_date'])) : '-'; ?>
   </p>
 
 
   <p> <i class="fa-solid fa-location-dot"></i>
     <strong>Lokasi Keberangkatan:</strong>
-    wiyungs
+     <?php echo htmlspecialchars($paket['departure_location']); ?>
   </p>
 
   <p> <i class="fa-solid fa-map-marker-alt"></i>
     <strong>Lokasi Tujuan:</strong>
-    Bandungs
+      <?php echo htmlspecialchars($paket['destination']); ?>
   </p>
 
   <p> <i class="fa-solid fa-money-bill-wave"></i>
     <strong>Harga per orang:</strong>
-    Rp. 2 jeti
+  Rp. <?php echo number_format($paket['price'], 0, ',', '.'); ?>
   </p>
 </div>
 
