@@ -39,9 +39,13 @@ $tanggal_tujuan = $package_data['departure_date'];
 $tanggal_kembali= $package_data['return_date'];
 
 
+function formatTanggal($tanggal) {
+    return date('d-m-Y', strtotime($tanggal));
+}
 
-
-
+function formatHarga($harga) {
+    return 'Rp. ' . number_format($harga, 2, ',', '.');
+}
 
 ?>
 
@@ -63,17 +67,20 @@ $tanggal_kembali= $package_data['return_date'];
       <p>Travel Aman & Nyaman Bersama Kami</p>
     </div>
 
-    <div class="tiket-info"><strong>Nama Pemesan:</strong> <?php echo $nama?></div>
-    <div class="tiket-info"><strong>Nama Paket:</strong> <?php echo $nama_package?></div>
-    <div class="tiket-info"><strong>Jenis Paket:</strong> <?php echo $jenis?></div>
-    <div class="tiket-info"><strong>Tanggal Berangkat:</strong><?php echo $tanggal_tujuan?></div>
-<?php if ($tanggal_kembali !== null): ?>
-    <div class="tiket-info"><strong>Tanggal Kembali:</strong> <?php echo $tanggal_kembali; ?></div>
-<?php endif; ?>
-    <div class="tiket-info"><strong>Lokasi Keberangkatan:</strong> <?php echo $berangkat?></div>
-    <div class="tiket-info"><strong>Lokasi Tujuan:</strong> <?php echo $tujuan?></div>
-    <div class="tiket-info"><strong>Jumlah Kursi:</strong> <?php echo $penumpang?></div>
-    <div class="tiket-info"><strong>Total Harga:</strong> <?php echo $harga?></div>
+    <div class="tiket-info"><span class="label">Nama Pemesan</span><span class="colon">:</span><span class="value"><?= htmlspecialchars($nama) ?></span></div>
+    <div class="tiket-info"><span class="label">Nama Paket</span><span class="colon">:</span><span class="value"><?= htmlspecialchars($nama_package) ?></span></div>
+    <div class="tiket-info"><span class="label">Jenis Paket</span><span class="colon">:</span><span class="value"><?= ucwords(str_replace('_', ' ', $jenis)) ?></span></div>
+    <div class="tiket-info"><span class="label">Tanggal Berangkat</span><span class="colon">:</span><span class="value"><?= formatTanggal($tanggal_tujuan) ?></span></div>
+
+    <?php if ($tanggal_kembali !== null): ?>
+      <div class="tiket-info"><span class="label">Tanggal Kembali</span><span class="colon">:</span><span class="value"><?= formatTanggal($tanggal_kembali) ?></span></div>
+    <?php endif; ?>
+
+    <div class="tiket-info"><span class="label">Lokasi Keberangkatan</span><span class="colon">:</span><span class="value"><?= htmlspecialchars($berangkat) ?></span></div>
+    <div class="tiket-info"><span class="label">Lokasi Tujuan</span><span class="colon">:</span><span class="value"><?= htmlspecialchars($tujuan) ?></span></div>
+    <div class="tiket-info"><span class="label">Jumlah Kursi</span><span class="colon">:</span><span class="value"><?= htmlspecialchars($penumpang) ?></span></div>
+    <div class="tiket-info"><span class="label">Total Harga</span><span class="colon">:</span><span class="value"><?= formatHarga($harga) ?></span></div>
+
 
     <div class="warning">
       Harap screenshot tiket ini sebagai bukti saat keberangkatan dan pengecekan status pesanan!

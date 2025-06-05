@@ -83,40 +83,42 @@ $stmt->execute();
 
 <div class="container">
   <!-- Kartu detail paket -->
-<div class="detail-paket">
-  <h2>Detail Paket</h2>
-  <p class="nama-paket"><?= htmlspecialchars($paket['name']) ?></p>
-
-  <p> <i class="fa-solid fa-suitcase-rolling"></i>
-    <strong>Jenis trip:</strong>
-   <?php echo htmlspecialchars($paket['trip_type']); ?>
+<!-- Kartu detail paket -->
+<div class="detail-paket" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+  <h2 style="text-align: center;">Detail Paket</h2>
+  <p class="nama-paket" style="font-size: 20px; font-weight: bold; text-align: center;">
+    <?= htmlspecialchars($paket['name']) ?>
   </p>
 
-  <p><i class="fa-solid fa-calendar-days"></i>
-  <strong>Tanggal keberangkatan:</strong>
-   <?php echo date('d-m-Y', strtotime($paket['departure_date'])); ?>
-  </p>
+  <div class="row-info">
+    <span><i class="fa-solid fa-suitcase-rolling"></i> <strong>Jenis trip</strong></span>
+    <span>: <?= $paket['trip_type'] === 'sekali_jalan' ? 'Sekali Jalan' : 'Pulang Pergi'; ?></span>
+  </div>
 
-  <p> <i class="fa-solid fa-suitcase-rolling"></i>
-    <strong>Tanggal Kembali:</strong>
-  <?php echo $paket['return_date'] ? date('d-m-Y', strtotime($paket['return_date'])) : '-'; ?>
-  </p>
+  <div class="row-info">
+    <span><i class="fa-solid fa-calendar-days"></i> <strong>Tanggal keberangkatan</strong></span>
+    <span>: <?= date('d-m-Y', strtotime($paket['departure_date'])); ?></span>
+  </div>
 
+  <div class="row-info">
+    <span><i class="fa-solid fa-calendar-days"></i> <strong>Tanggal kembali</strong></span>
+    <span>: <?= $paket['return_date'] ? date('d-m-Y', strtotime($paket['return_date'])) : '-'; ?></span>
+  </div>
 
-  <p> <i class="fa-solid fa-location-dot"></i>
-    <strong>Lokasi Keberangkatan:</strong>
-     <?php echo htmlspecialchars($paket['departure_location']); ?>
-  </p>
+  <div class="row-info">
+    <span><i class="fa-solid fa-location-dot"></i> <strong>Lokasi keberangkatan</strong></span>
+    <span>: <?= htmlspecialchars($paket['departure_location']); ?></span>
+  </div>
 
-  <p> <i class="fa-solid fa-map-marker-alt"></i>
-    <strong>Lokasi Tujuan:</strong>
-      <?php echo htmlspecialchars($paket['destination']); ?>
-  </p>
+  <div class="row-info">
+    <span><i class="fa-solid fa-map-marker-alt"></i> <strong>Lokasi tujuan</strong></span>
+    <span>: <?= htmlspecialchars($paket['destination']); ?></span>
+  </div>
 
-  <p> <i class="fa-solid fa-money-bill-wave"></i>
-    <strong>Harga per orang:</strong>
-  Rp. <?php echo number_format($paket['price'], 0, ',', '.'); ?>
-  </p>
+  <div class="row-info">
+    <span><i class="fa-solid fa-money-bill-wave"></i> <strong>Harga per orang</strong></span>
+    <span>: Rp. <?= number_format($paket['price'], 2, ',', '.'); ?></span>
+  </div>
 </div>
 
 

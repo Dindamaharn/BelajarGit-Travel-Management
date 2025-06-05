@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
       <!-- Pagination -->
       <div class="pagination" style="margin-top: 20px;">
         <?php if ($page > 1): ?>
-          <a href="?page=<?= $page - 1 ?>&search=<?= urlencode($search) ?>" class="page-link">&laquo; Prev</a>
+          <a href="?page=<?= $page - 1 ?>&search=<?= urlencode($search) ?>" class="page-link">&laquo; Kembali</a>
         <?php endif; ?>
 
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
@@ -183,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
         <?php endfor; ?>
 
         <?php if ($page < $totalPages): ?>
-          <a href="?page=<?= $page + 1 ?>&search=<?= urlencode($search) ?>" class="page-link">Next &raquo;</a>
+          <a href="?page=<?= $page + 1 ?>&search=<?= urlencode($search) ?>" class="page-link">Selanjutnya &raquo;</a>
         <?php endif; ?>
       </div>
 

@@ -161,3 +161,22 @@ body {
     border-right: none;
   }
 }
+
+.row-info {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 18px; /* samakan dengan .detail-paket p */
+  font-size: 16px;     /* samakan */
+  color: #003366;      /* samakan */
+  line-height: 1.5;
+}
+
+
+.row-info span:first-child {
+  width: 220px; /* Sesuaikan sesuai panjang maksimal label */
+  display: inline-block;
+}
+
+.row-info span:last-child {
+  flex: 1;
+}

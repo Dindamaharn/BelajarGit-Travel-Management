@@ -304,13 +304,13 @@ if (!empty($return_date)) {
           $iconSeat = '<svg xmlns="http://www.w3.org/2000/svg" '.$iconStyle.' viewBox="0 0 24 24"><path d="M4 12h16v6H4zM5 18v2h14v-2H5z"/></svg>';
           ?>
 
-          <?= labelValueWithIcon('Tanggal Berangkat', htmlspecialchars($row['departure_date']), $iconCalendar) ?>
-          <?php if (!empty($row['return_date'])): ?>
-            <?= labelValueWithIcon('Tanggal Kembali', htmlspecialchars($row['return_date']), $iconReturnCalendar) ?>
-          <?php endif; ?>
-          <?= labelValueWithIcon('Jenis Trip', htmlspecialchars($row['trip_type']), $iconTrip) ?>
-          <?= labelValueWithIcon('Harga', 'Rp' . number_format($row['price'], 2, ',', '.'), $iconPrice) ?>
-          <?= labelValueWithIcon('Kursi Tersedia', htmlspecialchars($row['available_seats']), $iconSeat) ?>
+          <?= labelValueWithIcon('Tanggal Berangkat', date('d-m-Y', strtotime($row['departure_date'])), $iconCalendar) ?>
+            <?php if (!empty($row['return_date'])): ?>
+          <?= labelValueWithIcon('Tanggal Kembali', date('d-m-Y', strtotime($row['return_date'])), $iconReturnCalendar) ?>
+            <?php endif; ?>
+          <?= labelValueWithIcon('Jenis Trip', ucwords(str_replace('_', ' ', $row['trip_type'])), $iconTrip) ?>
+          <?= labelValueWithIcon('Harga', 'Rp. ' . number_format($row['price'], 2, ',', '.'), $iconPrice) ?>
+
         </div>
 
         <div style="display: flex; align-items: center;">

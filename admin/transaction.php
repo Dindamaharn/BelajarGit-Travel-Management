@@ -110,7 +110,7 @@ if (!$result) {
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Transaction</title>
+  <title>Transaksi</title>
   <link rel="stylesheet" href="../css/admin/transaction.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
@@ -201,11 +201,11 @@ if (!$result) {
               <?php
                 $status = $row['status'];
                 if ($status === 'confirmed') {
-                  echo '<span class="status-confirmed">Confirmed</span>';
+                  echo '<span class="status-confirmed">Sukses</span>';
                 } elseif ($status === 'cancelled') {
-                  echo '<span class="status-cancel">cancelled</span>';
+                  echo '<span class="status-cancel">Dibatalkan</span>';
                 } else {
-                  echo '<span class="status-pending">Pending</span>';
+                  echo '<span class="status-pending">Tertunda</span>';
                 }
               ?>
             </td>
@@ -234,7 +234,7 @@ if (!$result) {
       <!-- Pagination -->
       <div class="pagination" style="margin-top: 20px;">
         <?php if ($page > 1): ?>
-          <a href="?page=<?= $page - 1; ?>&search=<?= urlencode($search); ?>" class="page-link">&laquo; Prev</a>
+          <a href="?page=<?= $page - 1; ?>&search=<?= urlencode($search); ?>" class="page-link">&laquo; Kembali</a>
         <?php endif; ?>
 
         <?php for ($i = 1; $i <= $total_pages; $i++): ?>

@@ -5,19 +5,32 @@ document.addEventListener('DOMContentLoaded', function () {
     const formOneway = document.getElementById('form-oneway');
     const formRoundtrip = document.getElementById('form-roundtrip');
 
-    onewayBtn.addEventListener('click', () => {
+    function showOnewayForm() {
         onewayBtn.classList.add('active');
         roundtripBtn.classList.remove('active');
         formOneway.style.display = 'flex';
         formRoundtrip.style.display = 'none';
-    });
+        localStorage.setItem('activeTab', 'oneway');
+    }
 
-    roundtripBtn.addEventListener('click', () => {
+    function showRoundtripForm() {
         roundtripBtn.classList.add('active');
         onewayBtn.classList.remove('active');
         formOneway.style.display = 'none';
         formRoundtrip.style.display = 'flex';
-    });
+        localStorage.setItem('activeTab', 'roundtrip');
+    }
+
+    onewayBtn.addEventListener('click', showOnewayForm);
+    roundtripBtn.addEventListener('click', showRoundtripForm);
+
+    // Baca status tab terakhir dari localStorage
+    const savedTab = localStorage.getItem('activeTab');
+    if (savedTab === 'roundtrip') {
+        showRoundtripForm();
+    } else {
+        showOnewayForm(); // default
+    }
 });
 
 // cara bayar

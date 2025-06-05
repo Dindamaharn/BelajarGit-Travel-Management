@@ -88,3 +88,26 @@
         display: none;
       }
     }
+
+    .tiket-info {
+  display: flex;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #003366;
+}
+
+.tiket-info .label {
+  width: 180px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.tiket-info .colon {
+  display: inline-block;
+  width: 10px; /* agar titik dua berada di kolom tetap */
+  text-align: center;
+}
+
+.tiket-info .value {
+  flex: 1;
+}
