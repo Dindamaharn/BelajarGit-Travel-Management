@@ -13,6 +13,7 @@ $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['searc
 $whereClause = '';
 if ($search !== '') {
     $whereClause = "WHERE 
+        orders.order_unique_id LIKE '%$search%' OR
         users.name LIKE '%$search%' OR 
         travel_packages.name LIKE '%$search%' OR 
         orders.metode_pembayaran LIKE '%$search%' OR
@@ -82,6 +83,7 @@ if (isset($_GET['reset']) && is_numeric($_GET['reset'])) {
 $query = "
 SELECT 
     orders.id AS order_id,
+    orders.order_unique_id,
     users.name AS user_name,
     travel_packages.name AS package_name,
     travel_packages.price AS seat_price,
@@ -180,7 +182,7 @@ if (!$result) {
         <tbody>
         <?php while ($row = mysqli_fetch_assoc($result)) : ?>
           <tr>
-            <td><?= $row['order_id']; ?></td>
+            <td><?= htmlspecialchars($row['order_unique_id']); ?></td>
             <td><?= $row['user_name']; ?></td>
             <td><?= htmlspecialchars($row['package_name']); ?></td>
             <td>Rp<?= number_format($row['seat_price'], 0, ',', '.'); ?></td>
@@ -232,17 +234,17 @@ if (!$result) {
       <!-- Pagination -->
       <div class="pagination" style="margin-top: 20px;">
         <?php if ($page > 1): ?>
-          <a href="?page=<?= $page - 1; ?>" class="page-link">&laquo; Prev</a>
+          <a href="?page=<?= $page - 1; ?>&search=<?= urlencode($search); ?>" class="page-link">&laquo; Prev</a>
         <?php endif; ?>
 
         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-          <a href="?page=<?= $i; ?>" class="page-link <?= $i == $page ? 'active' : '' ?>">
+          <a href="?page=<?= $i; ?>&search=<?= urlencode($search); ?>" class="page-link <?= $i == $page ? 'active' : '' ?>">
             <?= $i; ?>
           </a>
         <?php endfor; ?>
 
         <?php if ($page < $total_pages): ?>
-          <a href="?page=<?= $page + 1; ?>" class="page-link">Next &raquo;</a>
+          <a href="?page=<?= $page + 1; ?>&search=<?= urlencode($search); ?>" class="page-link">Next &raquo;</a>
         <?php endif; ?>
       </div>
 

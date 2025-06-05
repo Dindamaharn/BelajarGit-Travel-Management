@@ -1,11 +1,48 @@
 <?php
 session_start();
+include '../includes/db.php'; // pastikan file ini berisi koneksi ke $conn
+
 if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../auth/login.php");
     exit();
 }
 $username = $_SESSION['user_name'];
+
+
+$userResult = mysqli_query($conn, "SELECT COUNT(*) AS total_users FROM users");
+$userData = mysqli_fetch_assoc($userResult);
+$totalUsers = $userData['total_users'];
+
+$revenueResult = mysqli_query($conn, "SELECT SUM(total_price) AS total_revenue FROM orders WHERE status = 'confirmed'");
+$revenueData = mysqli_fetch_assoc($revenueResult);
+$totalRevenue = $revenueData['total_revenue'] ?? 0;
+
+$totalProfit = $totalRevenue * 0.15;
+
+// Jumlah paket
+$packageResult = mysqli_query($conn, "SELECT COUNT(*) AS total_packages FROM travel_packages");
+$packageData = mysqli_fetch_assoc($packageResult);
+$totalPackages = $packageData['total_packages'];
+
+// Jumlah transaksi
+$transactionResult = mysqli_query($conn, "SELECT COUNT(*) AS total_transactions FROM orders");
+$transactionData = mysqli_fetch_assoc($transactionResult);
+$totalTransactions = $transactionData['total_transactions'];
+
+
+$recentOrdersQuery = mysqli_query($conn, "
+  SELECT o.id, o.total_price, o.status, p.name AS package_name
+  FROM orders o
+  JOIN travel_packages p ON o.package_id = p.id
+  ORDER BY o.order_date DESC
+  LIMIT 3
+");
+
+
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="id">
@@ -52,15 +89,15 @@ $username = $_SESSION['user_name'];
 <div class="row cards-top">
   <div class="card">
     <h3>Total User</h3>
-    <p>150</p> <!-- nanti diganti dinamis -->
+    <p><?php echo $totalUsers; ?></p>
   </div>
   <div class="card">
     <h3>Total Paket</h3>
-    <p>35</p>
+    <p><?php echo $totalPackages; ?></p>
   </div>
   <div class="card">
     <h3>Total Order</h3>
-    <p>128</p>
+    <p><?php echo $totalTransactions; ?></p>
   </div>
 </div>
 
@@ -68,22 +105,27 @@ $username = $_SESSION['user_name'];
 <div class="row cards-bottom">
   <div class="card laba-card">
     <h3>Total Pendapatan</h3>
-    <p>Rp 50.000.000</p>
+    <p>Rp <?php echo number_format($totalRevenue, 0, ',', '.'); ?></p>
   </div>
   <div class="card laba-card">
     <h3>Laba</h3>
-    <p>Rp 600.000.000</p>
+    <p>Rp <?php echo number_format($totalProfit, 0, ',', '.'); ?></p>
   </div>
 
   <div class="card recent-order">
     <h3>Recently Order</h3>
     <ul>
    <ul>
-  <li>Order #001 - Paket A - Rp 1.500.000 <span class="badge completed">Completed</span></li>
-  <li>Order #002 - Paket B - Rp 2.000.000 <span class="badge pending">Pending</span></li>
-  <li>Order #003 - Paket C - Rp 1.000.000 <span class="badge cancelled">Cancelled</span></li>
-
-      <!-- isi bisa dinamis -->
+      <?php while ($order = mysqli_fetch_assoc($recentOrdersQuery)): ?>
+        <li>
+          Order #<?php echo str_pad($order['id'], 3, '0', STR_PAD_LEFT); ?> - 
+          <?php echo htmlspecialchars($order['package_name']); ?> - 
+          Rp <?php echo number_format($order['total_price'], 0, ',', '.'); ?>
+          <span class="badge <?php echo strtolower($order['status']); ?>">
+            <?php echo ucfirst($order['status']); ?>
+          </span>
+        </li>
+      <?php endwhile; ?>
     </ul>
   </div>
 </div>

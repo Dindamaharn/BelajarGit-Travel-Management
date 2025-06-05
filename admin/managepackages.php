@@ -185,7 +185,11 @@ $totalPages = ceil($totalRows / $limit);
                   echo "<tr>";
                   echo "<td>" . htmlspecialchars($row['id']) . "</td>";
                   echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                  echo "<td>" . htmlspecialchars($row['trip_type']) . "</td>";
+
+                  $tripType = str_replace('_', ' ', $row['trip_type']);
+                  $tripType = ucwords($tripType);
+                  echo "<td>" . htmlspecialchars($tripType) . "</td>";
+                  
                   echo "<td>" . htmlspecialchars($row['departure_location']) . "</td>";
                   echo "<td>" . htmlspecialchars($row['destination']) . "</td>";
                   echo "<td>" . htmlspecialchars($row['departure_date']) . "</td>";
