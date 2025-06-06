@@ -36,6 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
+    .pagination{
+      text-align: center;
+    }
+
     .page-link {
       margin: 0 5px;
       padding: 6px 12px;
@@ -76,11 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
       <!-- Main content -->
       <div class="main">
       <div class="content">
-      <h2>Kelola Pennguna</h2>
+      <h2>Kelola Pengguna</h2>
 
       <form method="GET" action="manageuser.php" style="margin-bottom: 20px;">
       <input type="text" name="search" placeholder="Cari pengguna..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
-      <button type="submit"><i class="fas fa-search"></i> Cari</button>
+      <button type="submit"><i class="fas fa-search"></i></button>
       <button type="button" onclick="window.location.href='manageuser.php'" title="Refresh" style="cursor:pointer;">
       <i class="fa-solid fa-rotate-right"></i>
       </button>

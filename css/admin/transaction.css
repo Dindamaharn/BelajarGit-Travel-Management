@@ -6,7 +6,7 @@ body {
 
 .container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 /* Sidebar */
@@ -199,5 +199,11 @@ form button:hover {
   font-size: 15px;
   color: white;
   transform: translateX(-20px);
+}
+
+input[type="date"] {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 

@@ -127,3 +127,14 @@ form button,
   color: white;
   transform: translateX(-20px);
 }
+
+.search-container label {
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+.search-container input[type="date"] {
+  padding: 4px 6px;
+}
+.btn-search {
+  cursor: pointer;
+}

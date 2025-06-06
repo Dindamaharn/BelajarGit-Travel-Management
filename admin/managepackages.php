@@ -144,24 +144,54 @@ $totalPages = ceil($totalRows / $limit);
     <div class="content">
       <h2>Kelola Paket</h2>
 
-      <div class="search-container">
-        <form method="GET" action="" style="display:flex; gap: 10px; align-items: center;">
-          <input 
-            type="text" 
-            name="search" 
-            class="search-input" 
-            placeholder="Cari nama paket..." 
-            value="<?php echo htmlspecialchars($search); ?>"
-            autocomplete="off"
-          />
-          <button type="submit" class="btn-search"><i class="fas fa-search"></i>Cari</button>
-          <button type="button" onclick="window.location.href='managepackages.php'" title="Refresh" class="btn-refresh">
-          <i class="fa-solid fa-rotate-right"></i>
-          </button>
+  
+  <!-- Flex container utama -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    
+    <!-- Bagian kiri: Search + tombol search & refresh -->
+    <form method="GET" action="managepackages.php" style="display: flex; gap: 10px; align-items: center;">
+      <input 
+        type="text" 
+        name="search" 
+        placeholder="Cari transaksi..." 
+        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" 
+        style="padding: 6px 10px;"
+      />
+      <button type="submit" style="padding: 6px 12px; cursor: pointer;">
+        <i class="fas fa-search"></i>
+      </button>
+      <button type="button" onclick="window.location.href='managepackages.php'" title="Refresh" style="cursor:pointer; padding: 6px 12px;">
+        <i class="fa-solid fa-rotate-right"></i>
+      </button>
+    </form>
 
-        </form>
+    <!-- Bagian kanan: Filter tanggal + tombol filter -->
+    <form method="GET" action="managepackages.php" style="display: flex; gap: 10px; align-items: center;">
+      <label for="start_date" style="font-weight: normal;">Dari:</label>
+      <input 
+        type="date" 
+        name="start_date" 
+        id="start_date" 
+        value="<?php echo isset($_GET['start_date']) ? htmlspecialchars($_GET['start_date']) : ''; ?>"
+        style="padding: 4px 8px;"
+      />
 
-      </div>
+      <label for="end_date" style="font-weight: normal;">Sampai:</label>
+      <input 
+        type="date" 
+        name="end_date" 
+        id="end_date" 
+        value="<?php echo isset($_GET['end_date']) ? htmlspecialchars($_GET['end_date']) : ''; ?>"
+        style="padding: 4px 8px;"
+      />
+
+      <button type="submit" style="padding: 6px 12px; cursor: pointer;">
+        <i class="fas fa-filter"></i>
+      </button>
+    </form>
+
+  </div>
+</div>
 
       <table class="packages-table">
         <thead>
@@ -224,7 +254,7 @@ $totalPages = ceil($totalRows / $limit);
       <?php if ($totalPages > 1): ?>
         <div class="pagination" style="margin-top: 20px; text-align:center;">
           <?php if ($page > 1): ?>
-            <a href="?<?php echo http_build_query(['page' => $page - 1, 'search' => $search]); ?>" class="pagination-link">&laquo; Prev</a>
+            <a href="?<?php echo http_build_query(['page' => $page - 1, 'search' => $search]); ?>" class="pagination-link">&laquo; Kembali</a>
           <?php endif; ?>
 
           <?php for ($i = 1; $i <= $totalPages; $i++): ?>

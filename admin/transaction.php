@@ -114,6 +114,9 @@ if (!$result) {
   <link rel="stylesheet" href="../css/admin/transaction.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
+    .pagination {
+      text-align: center;
+    }
     .page-link {
       margin: 0 5px;
       padding: 6px 12px;
@@ -156,12 +159,35 @@ if (!$result) {
 
     <div class="content">
       <h2>Transaction</h2>
-      <form method="GET" action="transaction.php" style="margin-bottom: 20px;">
-      <input type="text" name="search" placeholder="Cari transaksi..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
-      <button type="submit"><i class="fas fa-search"></i> Cari</button>
+      <!-- Flex container untuk baris -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    
+    <!-- Kolom kiri: Pencarian -->
+    <form method="GET" action="transaction.php" style="display: flex; gap: 10px;">
+      <input type="text" name="search" placeholder="Cari transaksi..." 
+        value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
+      <button type="submit"><i class="fas fa-search"></i></button>
       <button type="button" onclick="window.location.href='transaction.php'" title="Refresh" style="cursor:pointer;">
-      <i class="fa-solid fa-rotate-right"></i>
+        <i class="fa-solid fa-rotate-right"></i>
       </button>
+    </form>
+
+    <!-- Kolom kanan: Filter tanggal -->
+    <form method="GET" action="transaction.php" style="display: flex; gap: 10px; align-items: center;">
+      <label for="start_date">Dari:</label>
+      <input type="date" name="start_date" id="start_date" />
+
+      <label for="end_date">Sampai:</label>
+      <input type="date" name="end_date" id="end_date" />
+
+      <button type="submit" style="padding: 6px 12px;">
+        <i class="fas fa-filter"></i>
+      </button>
+    </form>
+
+    </div>
+
+
     </form>
     
       <table>
@@ -244,7 +270,7 @@ if (!$result) {
         <?php endfor; ?>
 
         <?php if ($page < $total_pages): ?>
-          <a href="?page=<?= $page + 1; ?>&search=<?= urlencode($search); ?>" class="page-link">Next &raquo;</a>
+          <a href="?page=<?= $page + 1; ?>&search=<?= urlencode($search); ?>" class="page-link">Selanjutnya &raquo;</a>
         <?php endif; ?>
       </div>
 
