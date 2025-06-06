@@ -118,6 +118,7 @@ html {
     padding-top: 150px;
     text-align: center;
     color: white;
+
 }
 
 .hero-title {
@@ -126,6 +127,7 @@ html {
     margin-bottom: 30px;
     padding-left: 115px;
     text-align: left;
+    transform: translateX(65px);
 }
 
 

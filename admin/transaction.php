@@ -158,7 +158,7 @@ if (!$result) {
     
 
     <div class="content">
-      <h2>Transaction</h2>
+      <h2>Transaksi</h2>
       <!-- Flex container untuk baris -->
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     
