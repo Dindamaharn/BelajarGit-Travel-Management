@@ -1,4 +1,7 @@
-  <!DOCTYPE html>
+<?php 
+session_start();
+?> 
+ <!DOCTYPE html>
   <html lang="id">
   <head>
       <meta charset="UTF-8">
@@ -23,11 +26,22 @@
         <a href="bantuan.php">Bantuan</a>
         <a href="carabayar.php">Cara Bayar</a>
       </div>
-    <div class="nav-right">
-      <a href="cekorder.php">Cek Order</a>
-      <a href="../auth/login.php">Masuk</a>
-      <a href="register.php" class="btn-daftar">Daftar</a>
-    </div>
+      <div class="nav-right">
+        <?php if (isset($_SESSION['user_id'])): ?>
+        <div class="user-dropdown">
+           <a href="cekorder.php">Cek Order</a>
+          <button class="dropdown-btn">
+            <?= !empty($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'User' ?> <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="../auth/logout.php">Keluar</a>
+          </div>
+        </div>
+        <?php else: ?>
+          <a href="../auth/login.php">Masuk</a>
+          <a href="register.php" class="btn-daftar">Daftar</a>
+        <?php endif; ?>
+      </div>
   </nav>
 
     </div>
