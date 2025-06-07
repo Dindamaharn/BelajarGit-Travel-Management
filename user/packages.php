@@ -34,7 +34,7 @@ $result = mysqli_query($conn, $query);
 <header class="header">
   <div class="container">
     <div class="logo-wrapper">
-      <img src="../img/logoputih.png" alt="Logo Kiran" />
+      <img src="../img/logowarna.jpg" alt="Logo Kiran" />
       <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
     </div>
     <nav class="navbar">
