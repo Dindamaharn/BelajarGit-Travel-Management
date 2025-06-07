@@ -1,6 +1,48 @@
 <?php
-// Tidak perlu koneksi database karena data ditampilkan statis
+// Masukkan koneksi database
+require '../includes/db.php';
+
+$orderId = '';
+$resultMessage = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Ambil input dari form
+    $orderId = $_POST['orderId'];
+
+    // Query untuk mencari order berdasarkan order_unique_id
+    $sql = "SELECT * FROM orders WHERE order_unique_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $orderId); // Mengikat parameter
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Pesanan ditemukan, ambil detail pesanan
+        $order = $result->fetch_assoc();
+
+        // Menampilkan semua kolom dari tabel orders
+        $resultMessage = "
+        <div class='hasil-pesanan'>
+            <h3>Detail Pesanan</h3>
+            <p><strong>ID Pemesanan:</strong> {$order['order_unique_id']}</p>
+            <p><strong>User ID:</strong> {$order['user_id']}</p>
+            <p><strong>Package ID:</strong> {$order['package_id']}</p>
+            <p><strong>Order Date:</strong> {$order['order_date']}</p>
+            <p><strong>Total People:</strong> {$order['total_people']}</p>
+            <p><strong>Total Price:</strong> {$order['total_price']}</p>
+            <p><strong>Status:</strong> {$order['status']}</p>
+            <p><strong>Payment Method:</strong> {$order['metode_pembayaran']}</p>
+            <p><strong>Payment Proof:</strong> {$order['bukti_bayar']}</p>
+        </div>";
+    } else {
+        // Jika tidak ada pesanan yang ditemukan
+        $resultMessage = "<p>Pesanan tidak ditemukan. Pastikan ID pemesanan yang Anda masukkan benar.</p>";
+    }
+
+    $stmt->close();
+    $conn->close();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -31,6 +73,42 @@
         .status-cancelled {
             background-color: #dc3545; /* Merah */
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -40,13 +118,13 @@
             <img src="../img/logowarna.jpg" alt="Logo Kiran">
             <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
         </div>
-         <nav class="navbar">
-      <div class="nav-left">
-        <a href="index.php">Beranda</a>
-        <a href="packages.php">Paket</a>
-        <a href="bantuan.php">Bantuan</a>
-        <a href="carabayar.php">Cara Bayar</a>
-      </div>
+        <nav class="navbar">
+            <div class="nav-left">
+                <a href="index.php">Beranda</a>
+                <a href="packages.php">Paket</a>
+                <a href="bantuan.php">Bantuan</a>
+                <a href="carabayar.php">Cara Bayar</a>
+            </div>
             <div class="nav-right">
                 <a href="cekorder.php">Cek Order</a>
                 <a href="../auth/login.php">Masuk</a>
@@ -62,26 +140,28 @@
         <div class="cek-illustration">
             <img src="../img/cekorder.png" alt="Cek Pesanan" />
             <h2>Cek Pesanan Kamu</h2>
-            <p>Masukkan email atau no. telepon dan ID pemesanan di form cek pesanan</p>
+            <p>Kode Pemesanan Kamu</p>
         </div>
 
         <!-- Kanan: Form -->
         <div class="cek-form">
             <h2>Cek Order</h2>
-            <form id="cekForm">
+            <form id="cekForm" method="POST" action="cekorder.php">
                 <label for="orderId">ID Pemesanan</label>
                 <input type="text" id="orderId" name="orderId" placeholder="Masukkan ID Pemesanan" required />
-
-                <label for="contact">No Telepon / Email Pemesan</label>
-                <input type="text" id="contact" name="contact" placeholder="Masukkan no telepon / email" required />
-
                 <button type="submit" class="btn-cek">Cek Pesanan</button>
             </form>
-
-            <div id="result" style="margin-top:20px;"></div>
         </div>
     </div>
 </section>
+
+<!-- Modal for result -->
+<div class="modal" id="resultModal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <?php echo $resultMessage; ?>
+    </div>
+</div>
 
 <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Kiran%20Travel,%20saya%20ingin%20tanya%20soal%20pembayaran" class="chat-wa" target="_blank">
     <i class="fab fa-whatsapp"></i> Chat Sekarang
@@ -109,38 +189,31 @@
 </footer>
 
 <script>
-    document.getElementById('cekForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const orderId = document.getElementById('orderId').value;
-        const contact = document.getElementById('contact').value;
-        const resultDiv = document.getElementById('result');
+    // Get the modal
+    var modal = document.getElementById("resultModal");
 
-        // Simulasi data statis
-        const dummyData = {
-            id: orderId,
-            contact: contact,
-            total_people: 3,
-            status: 'Menunggu Pembayaran' // Ganti ke 'Sudah Dibayar' atau 'Dibatalkan' untuk uji coba
-        };
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
 
-        let statusClass = '';
-        if (dummyData.status === 'Sudah Dibayar') {
-            statusClass = 'status-badge status-paid';
-        } else if (dummyData.status === 'Menunggu Pembayaran') {
-            statusClass = 'status-badge status-pending';
-        } else if (dummyData.status === 'Dibatalkan') {
-            statusClass = 'status-badge status-cancelled';
+    // Show the modal when the page loads if there's a result
+    window.onload = function() {
+        if (document.querySelector('.hasil-pesanan')) {
+            modal.style.display = "block";
         }
+    };
 
-        resultDiv.innerHTML = `
-            <div class="hasil-pesanan">
-                <h3>Detail Pesanan:</h3>
-                <p><strong>ID Pemesanan:</strong> ${dummyData.id}</p>
-                <p><strong>Jumlah Kursi:</strong> ${dummyData.total_people}</p>
-                <p><strong>Status:</strong> <span class="${statusClass}">${dummyData.status}</span></p>
-            </div>
-        `;
-    });
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 </script>
+
 </body>
 </html>

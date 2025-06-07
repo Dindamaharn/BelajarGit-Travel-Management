@@ -9,3 +9,6 @@ $hash = password_hash($password_plain, PASSWORD_DEFAULT);
 echo "Password asli: " . $password_plain . "<br>";
 echo "Hash untuk dimasukkan ke database:<br>";
 echo $hash;
+
+
+
