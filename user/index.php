@@ -3,8 +3,8 @@ session_start();
 include '../includes/db.php';
 
 // Ambil data dropdown
-$asal_result = $conn->query("SELECT DISTINCT departure_location FROM travel_packages WHERE departure_location IS NOT NULL");
-$tujuan_result = $conn->query("SELECT DISTINCT destination FROM travel_packages WHERE destination IS NOT NULL");
+$asal_result = $conn->query("SELECT DISTINCT departure_location FROM travel_packages WHERE departure_location IS NOT NULL AND is_expired = 0");
+$tujuan_result = $conn->query("SELECT DISTINCT destination FROM travel_packages WHERE destination IS NOT NULL AND is_expired = 0");
 
 // Inisialisasi variabel
 $hasil = null;
@@ -47,7 +47,8 @@ if (!empty($return_date)) {
                           AND destination = ? 
                           AND departure_date = ? 
                           AND return_date = ? 
-                          AND available_seats > 0";
+                          AND available_seats > 0
+                          AND is_expired = 0";
 
                 $stmt = $conn->prepare($query);
                 $stmt->bind_param("ssss", $asal, $tujuan, $departure_date, $return_date);
