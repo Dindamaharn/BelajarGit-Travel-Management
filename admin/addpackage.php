@@ -19,8 +19,19 @@ $username = $_SESSION['user_name'];
       const returnDateField = document.getElementById('return_date_group');
       returnDateField.style.display = (tripType === 'pulang_pergi') ? 'block' : 'none';
     }
-    window.onload = toggleReturnDate;
+
+    function setMinDate() {
+      const today = new Date().toISOString().split('T')[0];
+      document.querySelector('input[name="departure_date"]').setAttribute('min', today);
+      document.querySelector('input[name="return_date"]').setAttribute('min', today);
+    }
+
+    window.onload = function() {
+      setMinDate();
+      toggleReturnDate();
+    };
   </script>
+
 </head>
 <body>
   <div class="form-container">
@@ -106,6 +117,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $stmt->bind_param("sssssssddi", $trip_type, $name, $description, $departure_location, $destination, $departure_date, $return_date, $price, $available_seats, $created_by);
 
     if ($stmt->execute()) {
+        $_SESSION['alert'] = [
+          'type' => 'success',
+          'message' => 'Paket berhasil ditambahkan.'
+        ];
         header("Location: managepackages.php?success=1");
         exit();
     } else {
@@ -116,3 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $conn->close();
 }
 ?>
+
+
+

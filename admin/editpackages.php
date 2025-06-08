@@ -13,8 +13,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $packageId = intval($_GET['id']);
-$error = '';
-$success = '';
+
 
 $query = "SELECT * FROM travel_packages WHERE id = ?";
 $stmt = $conn->prepare($query);
@@ -53,20 +52,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("ssssssdii", $name, $trip_type, $departure_location, $destination, $departure_date, $return_date_db, $price, $available_seats, $packageId);
 
         if ($stmt->execute()) {
-            $success = "Paket berhasil diperbarui.";
-            $package = [
-                'name' => $name,
-                'trip_type' => $trip_type,
-                'departure_location' => $departure_location,
-                'destination' => $destination,
-                'departure_date' => $departure_date,
-                'return_date' => $return_date_db,
-                'price' => $price,
-                'available_seats' => $available_seats,
+            $_SESSION['alert'] = [
+                'type' => 'success',
+                'message' => 'Paket berhasil diperbarui.'
             ];
+            header("Location: managepackages.php");
+            exit();
         } else {
-            $error = "Terjadi kesalahan saat memperbarui data paket.";
+            $_SESSION['alert'] = [
+                'type' => 'error',
+                'message' => 'Terjadi kesalahan saat memperbarui data paket.'
+            ];
+            header("Location: managepackages.php");
+            exit();
         }
+
 
         $stmt->close();
     }
@@ -105,15 +105,7 @@ $conn->close();
   <div class="container">
 
     <h2>Edit Package</h2>
-
-    <?php if ($error): ?>
-      <div class="error"><?php echo htmlspecialchars($error); ?></div>
-    <?php endif; ?>
-
-    <?php if ($success): ?>
-      <div class="success"><?php echo htmlspecialchars($success); ?></div>
-    <?php endif; ?>
-
+    
     <form method="POST" action="">
       <div class="form-group">
         <label for="name">Nama Paket</label>

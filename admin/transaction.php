@@ -43,20 +43,64 @@ $total_pages = ceil($total_data / $limit);
 // Gunakan isset untuk menangani tombol form GET submit
 if (isset($_GET['confirm']) && is_numeric($_GET['confirm'])) {
     $order_id = intval($_GET['confirm']);
-    $update = mysqli_query($conn, "UPDATE orders SET status = 'confirmed' WHERE id = $order_id");  // perbaiki jadi confirmed, bukan cancelled
-    if ($update) {
-        header("Location: transaction.php");
-        exit();
+
+    // Ambil total orang dan package_id dari order
+    $order_result = mysqli_query($conn, "SELECT total_people, package_id FROM orders WHERE id = $order_id");
+    if ($order_result && mysqli_num_rows($order_result) > 0) {
+        $order = mysqli_fetch_assoc($order_result);
+        $total_people = $order['total_people'];
+        $package_id = $order['package_id'];
+
+        // Ambil jumlah kursi tersedia saat ini
+        $package_result = mysqli_query($conn, "SELECT available_seats FROM travel_packages WHERE id = $package_id");
+        if ($package_result && mysqli_num_rows($package_result) > 0) {
+            $package = mysqli_fetch_assoc($package_result);
+            $available_seats = $package['available_seats'];
+
+            // Pastikan kursi cukup
+            if ($available_seats >= $total_people) {
+                // Kurangi kursi tersedia
+                $new_seats = $available_seats - $total_people;
+                $update_seats = mysqli_query($conn, "UPDATE travel_packages SET available_seats = $new_seats WHERE id = $package_id");
+
+                if ($update_seats) {
+                    // Update status order ke confirmed
+                    $update_status = mysqli_query($conn, "UPDATE orders SET status = 'confirmed' WHERE id = $order_id");
+                    if ($update_status) {
+                        $_SESSION['alert'] = [
+                          'type' => 'success',
+                          'message' => 'Pesanan berhasil dikonfirmasi.'
+                        ];
+                        header("Location: transaction.php");
+                        exit();
+                    } else {
+                        echo "Gagal update status: " . mysqli_error($conn);
+                        exit();
+                    }
+                } else {
+                    echo "Gagal mengurangi kursi: " . mysqli_error($conn);
+                    exit();
+                }
+            } else {
+                echo "Kursi tersedia tidak mencukupi untuk konfirmasi.";
+                exit();
+            }
+        }
     } else {
-        echo "Gagal update status confirmed: " . mysqli_error($conn);
+        echo "Pesanan tidak ditemukan.";
         exit();
     }
 }
+
 
 if (isset($_GET['cancel']) && is_numeric($_GET['cancel'])) {
     $order_id = intval($_GET['cancel']);
     $update = mysqli_query($conn, "UPDATE orders SET status = 'cancelled' WHERE id = $order_id");
     if ($update) {
+        $_SESSION['alert'] = [
+          'type' => 'success',
+          'message' => 'Pesanan berhasil dibatalkan.'
+        ];
         header("Location: transaction.php");
         exit();
     } else {
@@ -68,15 +112,50 @@ if (isset($_GET['cancel']) && is_numeric($_GET['cancel'])) {
 // Reset status ke pending jika ada permintaan reset
 if (isset($_GET['reset']) && is_numeric($_GET['reset'])) {
     $order_id = intval($_GET['reset']);
-    $update = mysqli_query($conn, "UPDATE orders SET status = 'pending' WHERE id = $order_id");
-    if ($update) {
-        header("Location: transaction.php");
-        exit();
+
+    // Ambil data order dulu: status sekarang, total_people, package_id
+    $order_result = mysqli_query($conn, "SELECT status, total_people, package_id FROM orders WHERE id = $order_id");
+    if ($order_result && mysqli_num_rows($order_result) > 0) {
+        $order = mysqli_fetch_assoc($order_result);
+        $current_status = $order['status'];
+        $total_people = $order['total_people'];
+        $package_id = $order['package_id'];
+
+        // Kalau status sebelumnya confirmed, kursi dikembalikan
+        if ($current_status === 'confirmed') {
+            $package_result = mysqli_query($conn, "SELECT available_seats FROM travel_packages WHERE id = $package_id");
+            if ($package_result && mysqli_num_rows($package_result) > 0) {
+                $package = mysqli_fetch_assoc($package_result);
+                $available_seats = $package['available_seats'];
+                $new_seats = $available_seats + $total_people;
+
+                $update_seats = mysqli_query($conn, "UPDATE travel_packages SET available_seats = $new_seats WHERE id = $package_id");
+                if (!$update_seats) {
+                    echo "Gagal mengembalikan kursi saat reset: " . mysqli_error($conn);
+                    exit();
+                }
+            }
+        }
+
+        // Update status order jadi pending
+        $update = mysqli_query($conn, "UPDATE orders SET status = 'pending' WHERE id = $order_id");
+        if ($update) {
+            $_SESSION['alert'] = [
+              'type' => 'success',
+              'message' => 'Status pesanan berhasil di-reset ke pending.'
+            ];
+            header("Location: transaction.php");
+            exit();
+        } else {
+            echo "Gagal update status reset: " . mysqli_error($conn);
+            exit();
+        }
     } else {
-        echo "Gagal update status reset: " . mysqli_error($conn);
+        echo "Pesanan tidak ditemukan.";
         exit();
     }
 }
+
 
 
 // Query data dengan pencarian
@@ -145,7 +224,7 @@ if (!$result) {
     <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
   </div>
   <ul>
-    <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dasbor</span></a></li>
+    <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Beranda</span></a></li>
     <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Kelola Pengguna</span></a></li>
     <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Kelola Paket</span></a></li>
     <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li>
@@ -159,6 +238,17 @@ if (!$result) {
 
     <div class="content">
       <h2>Transaksi</h2>
+
+      <?php if (isset($_SESSION['alert'])): ?>
+        <div style="margin-bottom: 15px; padding: 10px; border-radius: 5px;
+                    background-color: <?= $_SESSION['alert']['type'] === 'success' ? '#d4edda' : '#f8d7da' ?>;
+                    color: <?= $_SESSION['alert']['type'] === 'success' ? '#155724' : '#721c24' ?>;
+                    border: 1px solid <?= $_SESSION['alert']['type'] === 'success' ? '#c3e6cb' : '#f5c6cb' ?>;">
+          <?= htmlspecialchars($_SESSION['alert']['message']) ?>
+        </div>
+        <?php unset($_SESSION['alert']); ?>
+      <?php endif; ?>
+
       <!-- Flex container untuk baris -->
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     
@@ -184,10 +274,7 @@ if (!$result) {
         <i class="fas fa-filter"></i>
       </button>
     </form>
-
     </div>
-
-
     </form>
     
       <table>
@@ -273,11 +360,8 @@ if (!$result) {
           <a href="?page=<?= $page + 1; ?>&search=<?= urlencode($search); ?>" class="page-link">Selanjutnya &raquo;</a>
         <?php endif; ?>
       </div>
-
-
     </div>
   </div>
 </div>
-
 </body>
 </html>

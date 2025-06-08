@@ -30,6 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn->prepare("UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ?");
         $stmt->bind_param("sssi", $name, $email, $phone, $id);
         if ($stmt->execute()) {
+            $_SESSION['alert'] = [
+                'type' => 'success',
+                'message' => 'User berhasil diperbarui.'
+            ];
             header("Location: manageuser.php");
             exit();
         } else {

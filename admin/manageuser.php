@@ -20,11 +20,34 @@ $offset = ($page - 1) * $limit;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $delete_id = intval($_POST['delete_id']);
-    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-    $stmt->bind_param("i", $delete_id);
-    $stmt->execute();
-    $stmt->close();
+    try {
+        $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+        $stmt->bind_param("i", $delete_id);
+        $stmt->execute();
+        $stmt->close();
+
+        $_SESSION['alert'] = [
+            'type' => 'success',
+            'message' => 'User berhasil dihapus.'
+        ];
+    } catch (mysqli_sql_exception $e) {
+        if (strpos($e->getMessage(), 'a foreign key constraint fails') !== false) {
+            $_SESSION['alert'] = [
+                'type' => 'error',
+                'message' => 'Hapus data gagal karena terhubung dengan data lain.'
+            ];
+        } else {
+            $_SESSION['alert'] = [
+                'type' => 'error',
+                'message' => 'Terjadi kesalahan saat menghapus user.'
+            ];
+        }
+    }
+
+    header("Location: manageuser.php");
+    exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -69,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
         <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
       </div>
       <ul>
-        <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dasbor</span></a></li>
+        <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Beranda</span></a></li>
     <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Kelola Pengguna</span></a></li>
     <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Kelola Paket</span></a></li>
     <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li>
@@ -81,6 +104,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
       <div class="main">
       <div class="content">
       <h2>Kelola Pengguna</h2>
+
+      <?php if (isset($_SESSION['alert'])): ?>
+        <div style="margin-bottom: 15px; padding: 10px; border-radius: 5px;
+                    background-color: <?= $_SESSION['alert']['type'] === 'success' ? '#d4edda' : '#f8d7da' ?>;
+                    color: <?= $_SESSION['alert']['type'] === 'success' ? '#155724' : '#721c24' ?>;
+                    border: 1px solid <?= $_SESSION['alert']['type'] === 'success' ? '#c3e6cb' : '#f5c6cb' ?>;">
+          <?= htmlspecialchars($_SESSION['alert']['message']) ?>
+        </div>
+        <?php unset($_SESSION['alert']); ?>
+      <?php endif; ?>
 
       <form method="GET" action="manageuser.php" style="margin-bottom: 20px;">
       <input type="text" name="search" placeholder="Cari pengguna..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
@@ -104,14 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
           <?php
           $search = isset($_GET['search']) ? trim($_GET['search']) : '';
           if ($search !== '') {
-              $stmt = $conn->prepare("SELECT id, name, email, phone FROM users WHERE 
-                CAST(id AS CHAR) LIKE ? OR 
-                name LIKE ? OR 
-                email LIKE ? OR 
-                phone LIKE ? 
-                LIMIT ? OFFSET ?");
-              $like = "%" . $search . "%";
-              $stmt->bind_param("ssssii", $like, $like, $like, $like, $limit, $offset);
               $stmt = $conn->prepare("SELECT id, name, email, phone FROM users WHERE name LIKE ? OR email LIKE ? OR phone LIKE ?  LIMIT ? OFFSET ?");
               $like = "%" . $search . "%";
               $stmt->bind_param("sssii", $like, $like, $like, $limit, $offset);
@@ -120,12 +145,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
               $stmt->close();
 
               // Hitung total hasil pencarian
-              $countStmt = $conn->prepare("SELECT COUNT(*) as total FROM users WHERE 
-                  CAST(id AS CHAR) LIKE ? OR 
-                  name LIKE ? OR 
-                  email LIKE ? OR 
-                  phone LIKE ?");
-              $countStmt->bind_param("ssss", $like, $like, $like, $like);
               $countStmt = $conn->prepare("SELECT COUNT(*) as total FROM users WHERE name LIKE ? OR email LIKE ? OR phone LIKE ?");
               $countStmt->bind_param("sss", $like, $like, $like);
               $countStmt->execute();

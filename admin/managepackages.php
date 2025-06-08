@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'admin') {
     // Jika ajax request kirim json unauthorized
     if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
@@ -14,6 +15,27 @@ if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'admin') {
 
 require '../includes/db.php';
 
+// Update status kadaluarsa berdasarkan tanggal keberangkatan
+// Tentukan tanggal hari ini (format YYYY-MM-DD)
+$today = date('Y-m-d');
+
+// Update paket yang sudah kadaluarsa (tanggal keberangkatan < hari ini) menjadi is_expired = 1
+$updateExpiredQuery = "UPDATE travel_packages SET is_expired = 1 WHERE departure_date < ? AND is_expired = 0";
+$stmtExpired = $conn->prepare($updateExpiredQuery);
+$stmtExpired->bind_param("s", $today);
+$stmtExpired->execute();
+$stmtExpired->close();
+
+// Update paket yang belum kadaluarsa (tanggal keberangkatan >= hari ini) menjadi is_expired = 0
+$updateNotExpiredQuery = "UPDATE travel_packages SET is_expired = 0 WHERE departure_date >= ? AND is_expired = 1";
+$stmtNotExpired = $conn->prepare($updateNotExpiredQuery);
+$stmtNotExpired->bind_param("s", $today);
+$stmtNotExpired->execute();
+$stmtNotExpired->close();
+
+
+
+$success = false; // Tambahkan ini
 // Handle AJAX delete request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     header('Content-Type: application/json');
@@ -23,11 +45,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
         $stmt = $conn->prepare("DELETE FROM travel_packages WHERE id = ?");
         $stmt->bind_param("i", $id);
 
-        if ($stmt->execute()) {
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Gagal menghapus data.']);
+        try {
+            if ($stmt->execute()) {
+                $_SESSION['alert'] = ['type' => 'success', 'message' => 'Paket berhasil dihapus.'];
+            }
+        } catch (mysqli_sql_exception $e) {
+            if (strpos($e->getMessage(), 'foreign key constraint fails') !== false) {
+                $_SESSION['alert'] = [
+                    'type' => 'error',
+                    'message' => 'Paket ini terhubung dengan data order. Tidak dapat dihapus.'
+                ];
+            } else {
+                $_SESSION['alert'] = [
+                    'type' => 'error',
+                    'message' => 'Terjadi kesalahan saat menghapus paket: ' . $e->getMessage()
+                ];
+            }
         }
+
+header("Location: managepackages.php");
+exit();
         $stmt->close();
     } else {
         echo json_encode(['success' => false, 'message' => 'ID tidak valid.']);
@@ -38,57 +75,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 
 $username = $_SESSION['user_name'];
 
-// Tangkap parameter search jika ada
+// Tangkap parameter search dan filter tanggal
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
+$end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
 
 // Konfigurasi paginasi
-$limit = 7; // 7 data per halaman
+$limit = 7;
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $offset = ($page - 1) * $limit;
 
+// Bangun WHERE clause dinamis
+$where = [];
+$params = [];
+$types = "";
 
-// Siapkan query dengan search jika ada
+// Search kata kunci (bisa di nama paket, trip_type, lokasi, destinasi)
 if ($search !== '') {
-
-   $likeSearch = '%' . $search . '%'; // <<< Tambahkan ini sebelum bind_param
-
-    $likeSearch = '%' . $search . '%';
-    $countStmt = $conn->prepare("SELECT COUNT(*) as total FROM travel_packages WHERE 
-        name LIKE ? OR 
-        trip_type LIKE ? OR 
-        departure_location LIKE ? OR 
-        destination LIKE ?");
-    $countStmt->bind_param("ssss", $likeSearch, $likeSearch, $likeSearch, $likeSearch);
-
-
-        $countStmt->execute();
-        $countResult = $countStmt->get_result();
-        $totalRows = $countResult->fetch_assoc()['total'];
-        $countStmt->close();
-
-    // Ambil data dengan paginasi
-
-    $stmt = $conn->prepare("SELECT * FROM travel_packages WHERE 
-        name LIKE ? OR 
-        trip_type LIKE ? OR 
-        departure_location LIKE ? OR 
-        destination LIKE ?
-        ORDER BY id ASC LIMIT ? OFFSET ?");
-    $stmt->bind_param("ssssii", $likeSearch, $likeSearch, $likeSearch, $likeSearch, $limit, $offset);
-
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-} else {
-    $countResult = $conn->query("SELECT COUNT(*) as total FROM travel_packages");
-    $totalRows = $countResult->fetch_assoc()['total'];
-
-    $query = "SELECT * FROM travel_packages ORDER BY id ASC LIMIT $limit OFFSET $offset";
-    $result = $conn->query($query);
+    $where[] = "(name LIKE ? OR trip_type LIKE ? OR departure_location LIKE ? OR destination LIKE ?)";
+    for ($i = 0; $i < 4; $i++) {
+        $params[] = "%$search%";
+        $types .= "s";
+    }
 }
 
-// Hitung total halaman
-$totalPages = ceil($totalRows / $limit); 
+// Filter tanggal keberangkatan
+if (!empty($start_date) && empty($end_date)) {
+    $where[] = "departure_date = ?";
+    $params[] = $start_date;
+    $types .= "s";
+} else {
+    if (!empty($start_date)) {
+        $where[] = "departure_date >= ?";
+        $params[] = $start_date;
+        $types .= "s";
+    }
+    if (!empty($end_date)) {
+        $where[] = "departure_date <= ?";
+        $params[] = $end_date;
+        $types .= "s";
+    }
+}
+
+$whereClause = count($where) > 0 ? "WHERE " . implode(" AND ", $where) : "";
+
+// Hitung total data untuk pagination
+$countQuery = "SELECT COUNT(*) as total FROM travel_packages $whereClause";
+$countStmt = $conn->prepare($countQuery);
+
+if ($types !== "") {
+    $countStmt->bind_param($types, ...$params);
+}
+$countStmt->execute();
+$countResult = $countStmt->get_result();
+$totalRows = $countResult->fetch_assoc()['total'];
+$countStmt->close();
+
+// Pagination
+$totalPages = ceil($totalRows / $limit);
+
+// Query data dengan LIMIT dan OFFSET
+$dataQuery = "SELECT * FROM travel_packages $whereClause ORDER BY id ASC LIMIT ? OFFSET ?";
+$params_with_limit = $params;  // Copy dulu
+$types_with_limit = $types;
+
+$params_with_limit[] = $limit;
+$params_with_limit[] = $offset;
+$types_with_limit .= "ii";
+
+$stmt = $conn->prepare($dataQuery);
+$stmt->bind_param($types_with_limit, ...$params_with_limit);
+$stmt->execute();
+$result = $stmt->get_result();
+
 ?>
 
 <!DOCTYPE html>
@@ -132,7 +191,7 @@ $totalPages = ceil($totalRows / $limit);
     <span class="logo-text"><strong>Kiran</strong> Tour & Travel</span>
   </div>
   <ul>
-<li><a href="dashboard.php"><i class="fas fa-home"></i><span>Dasbor</span></a></li>
+<li><a href="dashboard.php"><i class="fas fa-home"></i><span>Beranda</span></a></li>
     <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Kelola Pengguna</span></a></li>
     <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Kelola Paket</span></a></li>
     <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li>
@@ -189,9 +248,20 @@ $totalPages = ceil($totalRows / $limit);
         <i class="fas fa-filter"></i>
       </button>
     </form>
-
   </div>
 </div>
+
+      <?php if (isset($_SESSION['alert'])): ?>
+        <div style="margin-bottom: 15px; padding: 10px; border-radius: 5px;
+                    background-color: <?= $_SESSION['alert']['type'] === 'success' ? '#d4edda' : '#f8d7da' ?>;
+                    color: <?= $_SESSION['alert']['type'] === 'success' ? '#155724' : '#721c24' ?>;
+                    border: 1px solid <?= $_SESSION['alert']['type'] === 'success' ? '#c3e6cb' : '#f5c6cb' ?>;">
+          <?= htmlspecialchars($_SESSION['alert']['message']) ?>
+        </div>
+        <?php unset($_SESSION['alert']); ?>
+      <?php endif; ?>
+
+
 
       <table class="packages-table">
         <thead>
@@ -222,10 +292,17 @@ $totalPages = ceil($totalRows / $limit);
                   
                   echo "<td>" . htmlspecialchars($row['departure_location']) . "</td>";
                   echo "<td>" . htmlspecialchars($row['destination']) . "</td>";
-                  echo "<td>" . htmlspecialchars($row['departure_date']) . "</td>";
+                  echo "<td>" . date('d-m-Y', strtotime($row['departure_date'])) . "</td>";
                   echo "<td>" . ($row['trip_type'] === 'pulang_pergi' ? htmlspecialchars($row['return_date']) : '-') . "</td>";
                   echo "<td>Rp " . number_format($row['price'], 2, ',', '.') . "</td>";
-                  echo "<td>" . htmlspecialchars($row['available_seats']) . "</td>";
+
+                  // Cek apakah tanggal keberangkatan sudah lewat
+                  if ($row['is_expired'] == 1) {
+                      echo "<td><span style='color: red; font-weight: bold;'>Kadaluarsa</span></td>";
+                  } else {
+                      echo "<td>" . htmlspecialchars($row['available_seats']) . "</td>";
+                  }
+
                   echo "<td>
                         <a href='editpackages.php?id=" . $row['id'] . "' style='color: #007bff; text-decoration: none;'>
                           <i class='fas fa-edit'></i>
@@ -253,59 +330,38 @@ $totalPages = ceil($totalRows / $limit);
 
       <?php if ($totalPages > 1): ?>
         <div class="pagination" style="margin-top: 20px; text-align:center;">
-          <?php if ($page > 1): ?>
-            <a href="?<?php echo http_build_query(['page' => $page - 1, 'search' => $search]); ?>" class="pagination-link">&laquo; Kembali</a>
-          <?php endif; ?>
+          <a href="?<?php echo http_build_query([
+            'page' => $page - 1,
+            'search' => $search,
+            'start_date' => $start_date,
+            'end_date' => $end_date
+          ]); ?>" class="pagination-link">&laquo; Kembali</a>
 
           <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-            <a href="?<?php echo http_build_query(['page' => $i, 'search' => $search]); ?>"
+            <a href="?<?php echo http_build_query([
+              'page' => $i,
+              'search' => $search,
+              'start_date' => $start_date,
+              'end_date' => $end_date
+            ])
+            ; ?>"
               class="pagination-link <?php echo $i === $page ? 'active' : ''; ?>"
               style="margin: 0 5px;">
               <?php echo $i; ?>
             </a>
           <?php endfor; ?>
 
-          <?php if ($page < $totalPages): ?>
-            <a href="?<?php echo http_build_query(['page' => $page + 1, 'search' => $search]); ?>" class="pagination-link">Selanjutnya &raquo;</a>
-          <?php endif; ?>
+          <a href="?<?php echo http_build_query([
+            'page' => $page + 1,
+            'search' => $search,
+            'start_date' => $start_date,
+            'end_date' => $end_date
+          ]); ?>" class="pagination-link">Selanjutnya &raquo;</a>
         </div>
       <?php endif; ?>
 
     </div>
   </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.btn-delete').forEach(button => {
-    button.addEventListener('click', function() {
-      const packageId = this.getAttribute('data-id');
-      if (confirm('Apakah kamu yakin ingin menghapus paket ini?')) {
-        fetch('', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          body: 'delete_id=' + encodeURIComponent(packageId)
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert('Paket berhasil dihapus.');
-            const row = this.closest('tr');
-            if (row) row.remove();
-          } else {
-            alert('Gagal menghapus paket: ' + data.message);
-          }
-        })
-        .catch(() => {
-          alert('Terjadi kesalahan saat menghapus paket.');
-        });
-      }
-    });
-  });
-});
-</script>
 </body>
 </html>
