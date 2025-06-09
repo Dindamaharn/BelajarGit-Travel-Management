@@ -262,18 +262,7 @@ if (!$result) {
       </button>
     </form>
 
-    <!-- Kolom kanan: Filter tanggal -->
-    <form method="GET" action="transaction.php" style="display: flex; gap: 10px; align-items: center;">
-      <label for="start_date">Dari:</label>
-      <input type="date" name="start_date" id="start_date" />
-
-      <label for="end_date">Sampai:</label>
-      <input type="date" name="end_date" id="end_date" />
-
-      <button type="submit" style="padding: 6px 12px;">
-        <i class="fas fa-filter"></i>
-      </button>
-    </form>
+    
     </div>
     </form>
     
