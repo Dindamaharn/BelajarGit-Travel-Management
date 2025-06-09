@@ -21,18 +21,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Menampilkan semua kolom dari tabel orders
         $resultMessage = "
-        <div class='hasil-pesanan'>
-            <h3>Detail Pesanan</h3>
-            <p><strong>ID Pemesanan:</strong> {$order['order_unique_id']}</p>
-            <p><strong>User ID:</strong> {$order['user_id']}</p>
-            <p><strong>Package ID:</strong> {$order['package_id']}</p>
-            <p><strong>Order Date:</strong> {$order['order_date']}</p>
-            <p><strong>Total People:</strong> {$order['total_people']}</p>
-            <p><strong>Total Price:</strong> {$order['total_price']}</p>
-            <p><strong>Status:</strong> {$order['status']}</p>
-            <p><strong>Payment Method:</strong> {$order['metode_pembayaran']}</p>
-            <p><strong>Payment Proof:</strong> {$order['bukti_bayar']}</p>
-        </div>";
+<div class='ticket-card hasil-pesanan'>
+
+    <h3>Detail Pesanan</h3>
+    <p><strong>ID Pemesanan:</strong> {$order['order_unique_id']}</p>
+    <p><strong>User ID:</strong> {$order['user_id']}</p>
+    <p><strong>Package ID:</strong> {$order['package_id']}</p>
+    <p><strong>Order Date:</strong> {$order['order_date']}</p>
+    <p><strong>Total People:</strong> {$order['total_people']}</p>
+    <p><strong>Total Price:</strong> Rp " . number_format($order['total_price'], 0, ',', '.') . "</p>
+    <p><strong>Status:</strong> {$order['status']}</p>
+    <p><strong>Payment Method:</strong> {$order['metode_pembayaran']}</p>
+    <p><strong>Payment Proof:</strong> {$order['bukti_bayar']}</p>
+</div>";
+
     } else {
         // Jika tidak ada pesanan yang ditemukan
         $resultMessage = "<p>Pesanan tidak ditemukan. Pastikan ID pemesanan yang Anda masukkan benar.</p>";
@@ -52,6 +54,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
+        .ticket-card {
+    max-width: 500px;
+    margin: 220px auto;
+    padding: 24px;
+    background: #fffaf0;
+    border: 2px dashed #d2691e;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+    position: relative;
+}
+
+
+.ticket-card::before {
+    left: -10px;
+}
+
+.ticket-card::after {
+    right: -10px;
+}
+
+.ticket-card h3 {
+    margin-bottom: 16px;
+    color: #d2691e;
+    text-align: center;
+}
+
+.ticket-card p {
+    margin: 6px 0;
+    font-size: 15px;
+    color: #333;
+}
+
+.ticket-card strong {
+    color: #000;
+}
         .status-badge {
             display: inline-block;
             padding: 6px 12px;
@@ -87,20 +125,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: rgba(0, 0, 0, 0.4);
         }
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-        }
-
         .close {
-            color: #aaa;
+            color: black;
             float: right;
             font-size: 28px;
             font-weight: bold;
+        transform: translateX(-400px);
         }
 
         .close:hover,
