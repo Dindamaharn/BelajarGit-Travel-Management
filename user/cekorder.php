@@ -1,5 +1,7 @@
 <?php
 // Masukkan koneksi database
+session_start();
+
 require '../includes/db.php';
 
 $orderId = '';
