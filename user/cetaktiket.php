@@ -1,6 +1,7 @@
 <?php
 require_once '../includes/session.php'; // atau path relatifnya
 require '../includes/db.php';
+include '../includes/check_user.php';
 
 if (!isset($_SESSION['user_id'])) {
   echo "<script>alert('Silakan login terlebih dahulu.'); window.location='../auth/login.php';</script>";

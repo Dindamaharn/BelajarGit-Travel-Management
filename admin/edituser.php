@@ -1,9 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../auth/login.php");
-    exit();
-}
+include '../includes/check_admin.php'; 
+
 
 // Koneksi ke database
 $conn = new mysqli("localhost", "root", "", "kiran_travel"); // Ganti dengan DB kamu

@@ -1,17 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'admin') {
-    // Jika ajax request kirim json unauthorized
-    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
-        header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'message' => 'Unauthorized']);
-        exit();
-    } else {
-        header("Location: ../auth/login.php");
-        exit();
-    }
-}
+include '../includes/check_admin.php'; 
 
 require '../includes/db.php';
 

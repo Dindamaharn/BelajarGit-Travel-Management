@@ -1,9 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../auth/login.php");
-    exit();
-}
+include '../includes/check_admin.php'; 
+
 $username = $_SESSION['user_name'];
 
 // Koneksi ke database
@@ -173,10 +171,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
                   echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                   echo "<td>" . htmlspecialchars($row['phone']) . "</td>";
                   echo "<td>
-                          <a href='edituser.php?id=" . $row['id'] . "' style='color: #007bff;'>
-                          <i class='fas fa-edit'></i>
-                          </a>
-                          &nbsp;
                           <form method='POST' action='' style='display:inline;' onsubmit=\"return confirm('Yakin ingin menghapus user ini?');\">
                             <input type='hidden' name='delete_id' value='" . $row['id'] . "' />
                             <button type='submit' style='background:none;border:none;color:red;cursor:pointer;'>

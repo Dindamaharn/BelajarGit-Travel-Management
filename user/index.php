@@ -1,6 +1,15 @@
 <?php
 session_start();
+
+
+// Jika sudah login dan role-nya admin, arahkan keluar
+if (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+    header("Location: ../auth/login.php"); // Atau arahkan ke ../admin/index.php
+    exit();
+}
+
 include '../includes/db.php';
+
 
 // Ambil data dropdown
 $asal_result = $conn->query("SELECT DISTINCT departure_location FROM travel_packages WHERE departure_location IS NOT NULL AND is_expired = 0");

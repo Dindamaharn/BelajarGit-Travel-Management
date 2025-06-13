@@ -1,3 +1,5 @@
+<?php include '../includes/check_user.php'; ?>
+
 <!DOCTYPE html>
   <html lang="id">
   <head>

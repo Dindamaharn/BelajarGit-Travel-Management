@@ -1,11 +1,8 @@
 <?php
 session_start();
+include '../includes/check_admin.php'; 
 include '../includes/db.php'; // pastikan file ini berisi koneksi ke $conn
 
-if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../auth/login.php");
-    exit();
-}
 $username = $_SESSION['user_name'];
 
 

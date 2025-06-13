@@ -1,3 +1,5 @@
+<?php include '../includes/check_user.php'; ?>
+
 <?php
 include '../includes/db.php';
 session_start();
