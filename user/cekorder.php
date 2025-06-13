@@ -167,6 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?= !empty($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'User' ?> <i class="fa fa-caret-down"></i>
           </button>
           <div class="dropdown-content">
+                        <a href="profile.php"> My Profile </a>
             <a href="../auth/logout.php">Keluar</a>
           </div>
         </div>
