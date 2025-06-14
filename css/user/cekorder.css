@@ -60,6 +60,10 @@ html {
     display: block;
 }
 
+.dropdown-content.show {
+    display: block;
+}
+
 .header .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -305,4 +309,3 @@ html {
     margin-right: 8px;
     color: #333;
 }
-

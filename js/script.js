@@ -84,3 +84,20 @@ searchInput.addEventListener("keyup", function () {
         item.style.display = text.includes(filter) ? "block" : "none";
     });
 });
+
+// dropdown
+document.addEventListener("DOMContentLoaded", function () {
+    const dropdownBtn = document.querySelector(".dropdown-btn");
+    const dropdownContent = document.querySelector(".dropdown-content");
+
+    if (dropdownBtn && dropdownContent) {
+        dropdownBtn.addEventListener("click", function (e) {
+            e.stopPropagation(); // agar tidak langsung tertutup
+            dropdownContent.classList.toggle("show");
+        });
+
+        document.addEventListener("click", function () {
+            dropdownContent.classList.remove("show");
+        });
+    }
+});

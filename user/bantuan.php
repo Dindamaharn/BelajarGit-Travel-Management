@@ -37,7 +37,7 @@ include '../includes/check_user.php';
             <?= !empty($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'User' ?> <i class="fa fa-caret-down"></i>
           </button>
           <div class="dropdown-content">
-          <a href="profile.php"> My Profile </a>
+          <a href="profile.php"> Profil </a>
             <a href="../auth/logout.php">Keluar</a>
           </div>
         </div>
@@ -60,6 +60,24 @@ include '../includes/check_user.php';
       </a>
     </div>
   </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const dropdownBtn = document.querySelector(".dropdown-btn");
+  const dropdownContent = document.querySelector(".dropdown-content");
 
+  if (dropdownBtn && dropdownContent) {
+    dropdownBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      dropdownContent.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function () {
+      dropdownContent.classList.remove("show");
+    });
+  }
+});
+</script>
+
+  
 </body>
 </html>

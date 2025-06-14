@@ -56,6 +56,7 @@ $result = mysqli_query($conn, $query);
             <?= !empty($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : 'User' ?> <i class="fa fa-caret-down"></i>
           </button>
           <div class="dropdown-content">
+            <a href="profile.php"> Profil </a>
             <a href="../auth/logout.php">Keluar</a>
           </div>
         </div>
@@ -124,5 +125,23 @@ $result = mysqli_query($conn, $query);
     <p>© 2025 PT Trans Kiran Travel. All Rights Reserved.</p>
   </div>
 </footer>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const dropdownBtn = document.querySelector(".dropdown-btn");
+  const dropdownContent = document.querySelector(".dropdown-content");
+
+  if (dropdownBtn && dropdownContent) {
+    dropdownBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      dropdownContent.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function () {
+      dropdownContent.classList.remove("show");
+    });
+  }
+});
+</script>
+
 </body>
 </html>
