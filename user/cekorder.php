@@ -1,5 +1,4 @@
 <?php
-// Masukkan koneksi database
 include '../includes/check_user.php';
 
 require '../includes/db.php';
