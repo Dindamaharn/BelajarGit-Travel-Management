@@ -1,13 +1,5 @@
 <?php
-session_start();
-
-
-// Jika sudah login dan role-nya admin, arahkan keluar
-if (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
-    header("Location: ../auth/login.php"); // Atau arahkan ke ../admin/index.php
-    exit();
-}
-
+include '../includes/check_user.php';
 include '../includes/db.php';
 
 

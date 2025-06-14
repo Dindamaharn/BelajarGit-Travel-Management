@@ -1,6 +1,9 @@
-<?php include '../includes/check_user.php'; ?>
+<?php 
+include '../includes/check_user.php';
+include ("../includes/db.php");
+?>
 
-<?php include ("../includes/db.php"); ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>

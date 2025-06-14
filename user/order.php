@@ -1,6 +1,6 @@
 <?php
-require_once '../includes/session.php'; // atau path relatifnya
 include '../includes/check_user.php';
+require_once '../includes/session.php'; // atau path relatifnya
 require '../includes/db.php';
 
 

@@ -1,5 +1,5 @@
 <?php
-session_start();
+include '../includes/check_user.php';
 include '../includes/db.php'; // Pastikan koneksi database sudah dibuat
 
 // Ambil user_id dari session

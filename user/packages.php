@@ -1,8 +1,6 @@
-<?php include '../includes/check_user.php'; ?>
-
 <?php
+include '../includes/check_user.php'; 
 include '../includes/db.php';
-session_start();
 
 
 // --- Paginasi ---

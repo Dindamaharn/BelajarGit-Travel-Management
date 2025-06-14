@@ -1,6 +1,5 @@
 <?php
 // Masukkan koneksi database
-session_start();
 include '../includes/check_user.php';
 
 require '../includes/db.php';
