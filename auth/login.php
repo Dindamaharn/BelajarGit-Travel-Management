@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
           type="text"
           id="email"
           name="email"
-          placeholder="Masukan nomor telepon atau email"
+          placeholder="Masukan email"
           value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>"
           required
         >
