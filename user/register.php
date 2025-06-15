@@ -1,6 +1,12 @@
 <?php 
-require_once '../includes/session.php';
-include '../includes/check_user.php';
+session_start();
+
+// Cegah user yang sudah login membuka halaman register
+if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'user') {
+    header("Location: index.php");
+    exit();
+}
+
 include ("../includes/db.php");
 ?>
 
