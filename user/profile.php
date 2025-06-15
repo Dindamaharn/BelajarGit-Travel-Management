@@ -1,6 +1,7 @@
 <?php
+require_once '../includes/session.php';
 include '../includes/check_user.php';
-include '../includes/db.php'; // Pastikan koneksi database sudah dibuat
+include '../includes/db.php';
 
 // Ambil user_id dari session
 $user_id = $_SESSION['user_id'];
@@ -48,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 header("Location: profile.php?success=true");
                 exit();
             } else {
-                echo "Terjadi kesalahan dalam pengubahan data.";
+                echo "Terjadi kesalahan saat memperbarui data.";
             }
         } else {
             echo "Password baru dan konfirmasi password tidak cocok.";
@@ -61,11 +62,11 @@ $conn->close();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Profile</title>
+    <title>Profile Anda</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -74,28 +75,28 @@ $conn->close();
 <body>
 
 <div class="profile-container">
-    <h2>Update Profile</h2>
+    <h2>Profile Anda</h2>
     <form method="POST" action="">
-        <label for="name">New Name:</label>
+        <label for="name">Nama Baru:</label>
         <input type="text" name="name" id="name" value="<?= htmlspecialchars($name); ?>" required>
 
-        <label for="email">New Email:</label>
+        <label for="email">Email Baru:</label>
         <input type="email" name="email" id="email" value="<?= htmlspecialchars($email); ?>" required>
 
-        <label for="old_password">Old Password:</label>
+        <label for="old_password">Password Lama:</label>
         <input type="password" name="old_password" id="old_password" required>
 
-        <label for="new_password">New Password:</label>
+        <label for="new_password">Password Baru:</label>
         <input type="password" name="new_password" id="new_password" required>
 
-        <label for="confirm_password">Confirm New Password:</label>
+        <label for="confirm_password">Konfirmasi Password Baru:</label>
         <input type="password" name="confirm_password" id="confirm_password" required>
 
-        <label for="phone">New Phone:</label>
+        <label for="phone">Nomor Telepon Baru:</label>
         <input type="text" name="phone" id="phone" value="<?= htmlspecialchars($phone); ?>" required>
 
-        <button type="submit" class="btn btn-primary mt-3">Update</button>
-        <button type="button" class="btn btn-secondary mt-3" onclick="window.history.back();">Back</button>
+        <button type="submit" class="btn btn-primary mt-3">Perbarui</button>
+        <button type="button" class="btn btn-secondary mt-3" onclick="window.history.back();">Kembali</button>
     </form>
 </div>
 
@@ -105,10 +106,9 @@ $conn->close();
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="successModalLabel">Berhasil</h5>
-        
       </div>
       <div class="modal-body">
-        Data berhasil diubah!
+        Data berhasil diperbarui!
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>

@@ -1,7 +1,15 @@
 <?php
-include '../includes/check_user.php';
+session_start();
+require_once '../includes/db.php';
 
-require '../includes/db.php';
+// Cek jika sudah login tapi bukan user
+if (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] !== 'user') {
+    // Jika admin diarahkan ke dashboard admin
+    header("Location: ../admin/dashboard.php");
+    exit();
+}
+
+
 
 $orderId = '';
 $resultMessage = '';
@@ -9,37 +17,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil input dari form
     $orderId = $_POST['orderId'];
 
-    // Query untuk mencari order berdasarkan order_unique_id
-    $sql = "SELECT * FROM orders WHERE order_unique_id = ?";
+    // Query untuk mencari order sekaligus ambil nama user dan nama paket
+    $sql = "SELECT orders.*, users.name AS user_name, travel_packages.name AS package_name 
+            FROM orders 
+            JOIN users ON orders.user_id = users.id 
+            JOIN travel_packages ON orders.package_id = travel_packages.id 
+            WHERE orders.order_unique_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $orderId); // Mengikat parameter
+    $stmt->bind_param("s", $orderId);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Pesanan ditemukan, ambil detail pesanan
         $order = $result->fetch_assoc();
 
-        // Menampilkan semua kolom dari tabel orders
+        // Format status badge
+        $statusClass = '';
+        switch ($order['status']) {
+            case 'confirmed':
+                $statusClass = 'status-paid';
+                break;
+            case 'pending':
+                $statusClass = 'status-pending';
+                break;
+            case 'cancelled':
+                $statusClass = 'status-cancelled';
+                break;
+        }
+
         $resultMessage = "
-<div class='ticket-card hasil-pesanan'>
-
-    <h3>Detail Pesanan</h3>
-    <p><strong>ID Pemesanan:</strong> {$order['order_unique_id']}</p>
-    <p><strong>User ID:</strong> {$order['user_id']}</p>
-    <p><strong>Package ID:</strong> {$order['package_id']}</p>
-    <p><strong>Order Date:</strong> {$order['order_date']}</p>
-    <p><strong>Total People:</strong> {$order['total_people']}</p>
-    <p><strong>Total Price:</strong> Rp " . number_format($order['total_price'], 0, ',', '.') . "</p>
-    <p><strong>Status:</strong> {$order['status']}</p>
-    <p><strong>Payment Method:</strong> {$order['metode_pembayaran']}</p>
-    <p><strong>Payment Proof:</strong> {$order['bukti_bayar']}</p>
-</div>";
-
+    <div class='ticket-card hasil-pesanan'>
+        <h3>Detail Pesanan</h3>
+        <p><strong>Kode Tiket:</strong> {$order['order_unique_id']}</p>
+        <p><strong>Nama Pemesan:</strong> {$order['user_name']}</p>
+        <p><strong>Nama Paket:</strong> {$order['package_name']}</p>
+        <p><strong>Tanggal Pemesanan:</strong> {$order['order_date']}</p>
+        <p><strong>Total Orang:</strong> {$order['total_people']}</p>
+        <p><strong>Total Harga:</strong> Rp " . number_format($order['total_price'], 0, ',', '.') . "</p>
+        <p><strong>Status:</strong> <span class='status-badge {$statusClass}'>" . ucfirst($order['status']) . "</span></p>
+        <p><strong>Metode Pembayaran:</strong> {$order['metode_pembayaran']}</p>
+        <p><strong>Bukti Bayar:</strong> {$order['bukti_bayar']}</p>
+    </div>";
     } else {
-        // Jika tidak ada pesanan yang ditemukan
-        $resultMessage = "<p>Pesanan tidak ditemukan. Pastikan ID pemesanan yang Anda masukkan benar.</p>";
+        $resultMessage = "<p>Pesanan tidak ditemukan. Pastikan kode tiket yang Anda masukkan benar.</p>";
     }
+
 
     $stmt->close();
     $conn->close();
