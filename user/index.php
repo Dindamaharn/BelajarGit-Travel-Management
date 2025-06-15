@@ -1,6 +1,13 @@
 <?php
-include '../includes/check_user.php';
-include '../includes/db.php';
+session_start();
+require_once '../includes/db.php';
+
+// Cek jika sudah login tapi bukan user
+if (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] !== 'user') {
+    // Jika admin diarahkan ke dashboard admin
+    header("Location: ../admin/dashboard.php");
+    exit();
+}
 
 
 // Ambil data dropdown

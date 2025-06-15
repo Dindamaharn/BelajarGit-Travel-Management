@@ -1,5 +1,14 @@
-<?php include("db.php"); 
-include '../includes/check_user.php';
+<?php 
+session_start();
+require_once '../includes/db.php';
+
+// Cek jika sudah login tapi bukan user
+if (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] !== 'user') {
+    // Jika admin diarahkan ke dashboard admin
+    header("Location: ../admin/dashboard.php");
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html>

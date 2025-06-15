@@ -1,4 +1,5 @@
 <?php 
+require_once '../includes/session.php';
 include '../includes/check_user.php';
 include ("../includes/db.php");
 ?>
