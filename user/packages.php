@@ -16,12 +16,20 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $start = ($page > 1) ? ($page * $limit) - $limit : 0;
 
 // Hitung total data
-$total = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM travel_packages"));
-$pages = ceil($total / $limit);
+$total = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM travel_packages 
+          WHERE departure_date >= CURDATE() 
+          AND is_expired = 0"));
+
+$pages = ceil($total / $limit); 
 
 // Ambil data
-$query = "SELECT * FROM travel_packages ORDER BY departure_date ASC LIMIT $start, $limit";
+$query = "SELECT * FROM travel_packages 
+          WHERE departure_date >= CURDATE() 
+          AND is_expired = 0 
+          ORDER BY departure_date ASC 
+          LIMIT $start, $limit";
 $result = mysqli_query($conn, $query);
+
 ?>
 
 <!DOCTYPE html>
