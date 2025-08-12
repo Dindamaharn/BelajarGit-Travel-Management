@@ -66,7 +66,7 @@ if (!empty($return_date)) {
             }
 
         } else {
-            // ✅ LOGIKA SEKALI JALANddddd
+            // ✅ LOGIKA SEKALI JALANddd
             $query = "SELECT * FROM travel_packages 
                       WHERE departure_location = ? 
                       AND destination = ? 
