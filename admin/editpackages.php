@@ -51,14 +51,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $_SESSION['alert'] = [
                 'type' => 'success',
-                'message' => 'Paket berhasil diperbarui.'
+                'message' => 'Paket berhasil diperbarui.yahuhuhhuhuh'
             ];
             header("Location: managepackages.php");
             exit();
         } else {
             $_SESSION['alert'] = [
                 'type' => 'error',
-                'message' => 'Terjadi kesalahan saat memperbarui data paket.'
+                'message' => 'Terjadi kesalahan saat memperbarui data paket.hahahaha'
             ];
             header("Location: managepackages.php");
             exit();
