@@ -49,7 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                 $error = "Password salah.";
             }
         } else {
-            $error = "Email tidak terdaftar goblok!!!.";
+            $error = "Email tidak ada ya sayang!!!.
+            
+            sayangku padamu, kan ku ingat selalu
+            
+            ";
         }
     }
 }
