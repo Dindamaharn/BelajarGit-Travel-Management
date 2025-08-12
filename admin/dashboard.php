@@ -60,8 +60,8 @@ $recentOrdersQuery = mysqli_query($conn, "
   </div>
   <ul>
     <li><a href="dashboard.php"><i class="fas fa-home"></i><span>Beranda</span></a></li>
-    <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Kelola Pengguna</span></a></li>
-    <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Kelola Paket</span></a></li>
+    <li><a href="manageuser.php"><i class="fas fa-users"></i><span>Kelola User</span></a></li>
+    <li><a href="managepackages.php"><i class="fas fa-suitcase"></i><span>Kelola Paket Wisata</span></a></li>
     <li><a href="transaction.php"><i class="fas fa-file-invoice"></i><span>Transaksi</span></a></li>
     <li class="logout-item"><a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i><span>Keluar</span></a></li>
   </ul>
@@ -73,7 +73,7 @@ $recentOrdersQuery = mysqli_query($conn, "
     <div class="topbar">
   <div class="greeting">
     <p>Selamat datang kembali, <strong><?php echo htmlspecialchars($username); ?></strong>!</p>
-    <h3>Semoga harimu menyenangkan 😊</h3>
+    <h3>Semoga harimu menyenangkan 😊 semangatt</h3>
   </div>
 
     </div>
@@ -85,11 +85,11 @@ $recentOrdersQuery = mysqli_query($conn, "
 <!-- Row 1: 3 Cards -->
 <div class="row cards-top">
   <div class="card">
-    <h3>Total Pengguna</h3>
+    <h3>Total Pengguna Aplikasi</h3>
     <p><?php echo $totalUsers; ?></p>
   </div>
   <div class="card">
-    <h3>Total Paket</h3>
+    <h3>Total Paket Wisata</h3>
     <p><?php echo $totalPackages; ?></p>
   </div>
   <div class="card">
