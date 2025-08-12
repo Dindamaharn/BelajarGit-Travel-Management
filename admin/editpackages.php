@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $_SESSION['alert'] = [
                 'type' => 'success',
-                'message' => 'Paket berhasil diperbarui.'
+                'message' => 'Paket berhasil diperbarui, anjay gurinjay'
             ];
             header("Location: managepackages.php");
             exit();
