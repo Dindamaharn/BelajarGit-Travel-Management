@@ -8,7 +8,7 @@ $username = $_SESSION['user_name'];
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Tambah Paket</title>
+  <title>Tambah PaketTravel</title>
   <link rel="stylesheet" href="../css/admin/addpackage.css">
   <script>
     function toggleReturnDate() {
@@ -32,7 +32,7 @@ $username = $_SESSION['user_name'];
 </head>
 <body>
   <div class="form-container">
-    <h2>Tambah Paket Wisata</h2>
+    <h2>Tambah Paket Wisata Seru</h2>
     <form action="addpackage.php" method="POST">
       <div class="form-group">
         <label for="trip_type">Jenis Perjalanan</label>

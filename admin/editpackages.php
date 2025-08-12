@@ -148,7 +148,7 @@ $conn->close();
       </div>
 
       <div class="button-row">
-        <button type="submit" class="btn-submit">Update Package</button>
+        <button type="submit" class="btn-submit">Update Package Wisata</button>
         <a href="managepackages.php" class="btn-back">Cancel</a>
       </div>
     </form>
