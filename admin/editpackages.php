@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $_SESSION['alert'] = [
                 'type' => 'success',
-                'message' => 'Paket berhasil diperbarui.'
+                'message' => 'Paket berhasil diperbarui, anjay gurinjay'
             ];
             header("Location: managepackages.php");
             exit();
@@ -148,7 +148,7 @@ $conn->close();
       </div>
 
       <div class="button-row">
-        <button type="submit" class="btn-submit">Update Package</button>
+        <button type="submit" class="btn-submit">Update Package Wisata</button>
         <a href="managepackages.php" class="btn-back">Cancel</a>
       </div>
     </form>

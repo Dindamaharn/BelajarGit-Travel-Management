@@ -144,7 +144,7 @@ $result = $stmt->get_result();
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Manage Packages</title>
+  <title>Manage Packages Travel</title>
   <link rel="stylesheet" href="../css/admin/managepackages.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
@@ -169,7 +169,7 @@ $result = $stmt->get_result();
 <body>
 <div class="btn-add-package-wrapper" style="position: relative;">
   <a href="addpackage.php" class="btn-add-package" style="position: absolute; top: 20px; right: 20px;">
-    + Tambah Paket
+    + Tambah Paket Travel
   </a>
 </div>
 
