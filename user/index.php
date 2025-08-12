@@ -255,6 +255,33 @@ if (!empty($return_date)) {
       <input type="hidden" id="return-date" name="return_date" value="<?= htmlspecialchars($return_date ?? '') ?>" />
     </div>
   </div>
+  <div class="search-group">
+    <label>Tanggal Pulang Pergi</label>
+    <div class="input-wrapper">
+      <i class="fa fa-calendar-days"></i>
+      <input type="text" id="display-range" readonly placeholder="Pilih tanggal" />
+      <input type="hidden" id="departure-date" name="departure_date" value="<?= htmlspecialchars($departure_date ?? '') ?>" />
+      <input type="hidden" id="return-date" name="return_date" value="<?= htmlspecialchars($return_date ?? '') ?>" />
+    </div>
+  </div>
+  <div class="search-group">
+    <label>Tanggal Pulang Pergi</label>
+    <div class="input-wrapper">
+      <i class="fa fa-calendar-days"></i>
+      <input type="text" id="display-range" readonly placeholder="Pilih tanggal" />
+      <input type="hidden" id="departure-date" name="departure_date" value="<?= htmlspecialchars($departure_date ?? '') ?>" />
+      <input type="hidden" id="return-date" name="return_date" value="<?= htmlspecialchars($return_date ?? '') ?>" />
+    </div>
+  </div>
+  <div class="search-group">
+    <label>Tanggal Pulang Pergi</label>
+    <div class="input-wrapper">
+      <i class="fa fa-calendar-days"></i>
+      <input type="text" id="display-range" readonly placeholder="Pilih tanggal" />
+      <input type="hidden" id="departure-date" name="departure_date" value="<?= htmlspecialchars($departure_date ?? '') ?>" />
+      <input type="hidden" id="return-date" name="return_date" value="<?= htmlspecialchars($return_date ?? '') ?>" />
+    </div>
+  </div>
 
   <button type="submit" class="btn-cari"><i class="fa fa-search"></i> Cari</button>
 </form>
