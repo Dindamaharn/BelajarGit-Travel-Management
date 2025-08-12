@@ -231,6 +231,11 @@ if (!empty($return_date)) {
     <label>Untuk Tujuan</label>
     <select name="tujuan" required>
       <option value="">-- Pilih Tujuan --</option>
+      <option value="">-- Pilih Tujuan --</option>
+      <option value="">-- Pilih Tujuan --</option>
+      <option value="">-- Pilih Tujuan --</option>
+      <option value="">-- Pilih Tujuan --</option>
+      <option value="">-- Pilih Tujuan --</option>
       <?php
       $tujuan_result->data_seek(0);
       while ($row = $tujuan_result->fetch_assoc()): ?>
